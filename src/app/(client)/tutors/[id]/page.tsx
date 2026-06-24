@@ -16,6 +16,7 @@ import {
   TutorAvailableSlotsTable,
   TutorSlotData,
 } from "@/components/tutors/TutorAvailableSlotsTable";
+import { PaymentChoiceModal } from "@/components/bookings/student/PaymentChoiceModal";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 
@@ -28,6 +29,12 @@ export default function TutorProfileDetailsPage() {
   const [slots, setSlots] = useState<TutorSlotData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSlotsLoading, setIsSlotsLoading] = useState(true);
+
+  // Payment choice modal state
+  const [paymentChoiceBookingId, setPaymentChoiceBookingId] = useState<
+    string | null
+  >(null);
+  const [isPaymentChoiceOpen, setIsPaymentChoiceOpen] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -69,21 +76,80 @@ export default function TutorProfileDetailsPage() {
     }
   };
 
-  const handleBookSlot = async (slotId: string) => {
-    const toastId = toast.loading("Booking your slot...");
+  const initiateStripeCheckout = async (bookingId: string) => {
     try {
-      const res = await fetch(`${API_BASE}/bookings/book`, {
+      const res = await fetch(`${API_BASE}/payments/create-checkout-session`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ availabilityId: slotId }),
+        body: JSON.stringify({ bookingId }),
         credentials: "include",
       });
       const json = await res.json();
-      if (json.success) {
-        toast.success("Class booked successfully!", { id: toastId });
-        fetchTutorSlots();
+      if (json.success && json.data?.url) {
+        window.location.href = json.data.url;
       } else {
-        toast.error(json.message || "Failed to book slot.", { id: toastId });
+        toast.error(json.message || "Failed to create payment session.");
+      }
+    } catch (err) {
+      console.error("Stripe checkout error:", err);
+      toast.error("An error occurred while initiating payment.");
+    }
+  };
+
+  const initiateDirectCheckout = async (availabilityId: string) => {
+    try {
+      const res = await fetch(`${API_BASE}/payments/create-direct-checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ availabilityId }),
+        credentials: "include",
+      });
+      const json = await res.json();
+      if (json.success && json.data?.url) {
+        window.location.href = json.data.url;
+      } else {
+        toast.error(json.message || "Failed to create payment session.");
+      }
+    } catch (err) {
+      console.error("Direct checkout error:", err);
+      toast.error("An error occurred while initiating payment.");
+    }
+  };
+
+  const handleBookSlot = async (slotId: string, paymentMethod: string) => {
+    const toastId = toast.loading(
+      paymentMethod === "stripe"
+        ? "Redirecting to payment..."
+        : "Booking your slot...",
+    );
+    try {
+      if (paymentMethod === "stripe") {
+        toast.success("Redirecting to Stripe...", { id: toastId });
+        await initiateDirectCheckout(slotId);
+      } else {
+        const res = await fetch(`${API_BASE}/bookings/book`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ availabilityId: slotId }),
+          credentials: "include",
+        });
+        const json = await res.json();
+
+        if (json.success) {
+          const bookingData = json.data;
+
+          if (paymentMethod === "both") {
+            toast.success("Slot booked! Choose how to pay.", { id: toastId });
+            setPaymentChoiceBookingId(bookingData.id);
+            setIsPaymentChoiceOpen(true);
+            fetchTutorSlots();
+          } else {
+            toast.success("Class booked successfully!", { id: toastId });
+            fetchTutorSlots();
+          }
+        } else {
+          toast.error(json.message || "Failed to book slot.", { id: toastId });
+        }
       }
     } catch (err) {
       console.error("Booking handler error:", err);
@@ -314,6 +380,27 @@ export default function TutorProfileDetailsPage() {
           )}
         </div>
       </div>
+
+      {/* Payment choice modal for "both" payment method slots */}
+      <PaymentChoiceModal
+        isOpen={isPaymentChoiceOpen}
+        onClose={() => {
+          setIsPaymentChoiceOpen(false);
+          setPaymentChoiceBookingId(null);
+        }}
+        onPayNow={async () => {
+          setIsPaymentChoiceOpen(false);
+          if (paymentChoiceBookingId) {
+            await initiateStripeCheckout(paymentChoiceBookingId);
+          }
+          setPaymentChoiceBookingId(null);
+        }}
+        onPayLater={() => {
+          setIsPaymentChoiceOpen(false);
+          setPaymentChoiceBookingId(null);
+          toast.success("Booking confirmed! You can pay with cash later.");
+        }}
+      />
     </main>
   );
 }

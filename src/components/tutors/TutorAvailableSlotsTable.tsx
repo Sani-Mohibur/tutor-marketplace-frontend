@@ -1,7 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, Clock, DollarSign, BookOpen, MapPin } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  DollarSign,
+  BookOpen,
+  MapPin,
+  CreditCard,
+  Banknote,
+} from "lucide-react";
 import Link from "next/link";
 import { ROLES } from "@/constants/roles";
 
@@ -13,11 +21,12 @@ export interface TutorSlotData {
   slot: string;
   timeDuration: string | null;
   pricePerHour: number | 0;
+  paymentMethod?: string; // "cash" | "stripe" | "both"
 }
 
 interface TutorAvailableSlotsTableProps {
   slots: TutorSlotData[];
-  onBookSlot: (slotId: string) => Promise<void>;
+  onBookSlot: (slotId: string, paymentMethod: string) => Promise<void>;
   isLoading: boolean;
   userRole?: string;
 }
@@ -33,7 +42,8 @@ export function TutorAvailableSlotsTable({
   const handleBookingClick = async (id: string) => {
     setBookingId(id);
     try {
-      await onBookSlot(id);
+      const slot = slots.find((s) => s.id === id);
+      await onBookSlot(id, slot?.paymentMethod || "cash");
     } catch (error) {
       console.error("Booking failed:", error);
     } finally {
@@ -152,6 +162,29 @@ export function TutorAvailableSlotsTable({
                         {item.timeDuration
                           ? `${item.timeDuration} mins`
                           : "Flexible"}
+                      </span>
+
+                      {/* Payment Method Badge added exactly like reference */}
+                      <span
+                        className={`flex items-center gap-0.5 font-bold px-1.5 py-0.5 rounded-full text-[9px] border ${
+                          item.paymentMethod === "stripe"
+                            ? "bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20"
+                            : item.paymentMethod === "both"
+                              ? "bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20"
+                              : "bg-zinc-500/10 text-zinc-600 dark:text-zinc-400 border-zinc-500/20"
+                        }`}
+                      >
+                        {item.paymentMethod === "stripe" ||
+                        item.paymentMethod === "both" ? (
+                          <CreditCard className="w-2.5 h-2.5" />
+                        ) : (
+                          <Banknote className="w-2.5 h-2.5" />
+                        )}
+                        {item.paymentMethod === "both"
+                          ? "Cash/Stripe"
+                          : item.paymentMethod === "stripe"
+                            ? "Stripe"
+                            : "Cash"}
                       </span>
                     </div>
                   </td>
