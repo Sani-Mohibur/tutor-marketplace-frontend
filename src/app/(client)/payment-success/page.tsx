@@ -82,8 +82,11 @@ function PaymentSuccessPage() {
     }).format(amount);
   };
 
-  const generateReceiptPDF = () => {
+  const generateReceiptPDF = async () => {
     if (!receipt) return;
+
+    // Dynamically import to avoid Next.js SSR window errors
+    const html2pdf = (await import("html2pdf.js")).default;
 
     const dateStr = receipt.sessionDate
       ? new Date(receipt.sessionDate).toLocaleDateString(undefined, {
@@ -92,76 +95,56 @@ function PaymentSuccessPage() {
       : "N/A";
     const amountStr = formatCurrency(receipt.amount, receipt.currency);
 
-    const html = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Payment Receipt - SkillBridge</title>
-        <style>
-          * { margin: 0; padding: 0; box-sizing: border-box; }
-          body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; padding: 40px; color: #1a1a1a; max-width: 600px; margin: 0 auto; }
-          .header { text-align: center; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 2px solid #e5e7eb; }
-          .header h1 { font-size: 22px; font-weight: 800; color: #059669; margin-bottom: 4px; }
-          .header p { font-size: 12px; color: #6b7280; }
-          .badge { display: inline-block; background: #d1fae5; color: #059669; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-          .section { margin-bottom: 20px; }
-          .section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #9ca3af; margin-bottom: 10px; }
-          .row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 13px; }
-          .row .label { color: #6b7280; }
-          .row .value { font-weight: 600; color: #1a1a1a; }
-          .divider { border: none; border-top: 1px solid #e5e7eb; margin: 16px 0; }
-          .amount-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; }
-          .amount-row .label { font-size: 14px; font-weight: 600; color: #374151; }
-          .amount-row .value { font-size: 24px; font-weight: 800; color: #059669; }
-          .txn-id { background: #f3f4f6; padding: 12px; border-radius: 8px; margin-top: 16px; }
-          .txn-id .label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #9ca3af; display: block; margin-bottom: 4px; }
-          .txn-id .value { font-size: 10px; color: #6b7280; word-break: break-all; font-family: monospace; }
-          .footer { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 2px solid #e5e7eb; font-size: 11px; color: #9ca3af; }
-          @media print { body { padding: 20px; } }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>✅ Payment Receipt</h1>
-          <p>SkillBridge — Tutoring Platform</p>
-          <div style="margin-top: 10px;"><span class="badge">${receipt.paymentStatus?.toUpperCase()}</span></div>
+    // Create a temporary container with inline styles (required for html2pdf)
+    const element = document.createElement("div");
+    element.innerHTML = `
+      <div style="font-family: 'Segoe UI', system-ui, sans-serif; padding: 40px; color: #1a1a1a; max-width: 600px; margin: 0 auto;">
+        <div style="text-align: center; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 2px solid #e5e7eb;">
+          <h1 style="font-size: 22px; font-weight: 800; color: #059669; margin-bottom: 4px;">✅ Payment Receipt</h1>
+          <p style="font-size: 12px; color: #6b7280;">SkillBridge — Tutoring Platform</p>
+          <div style="margin-top: 10px;">
+            <span style="display: inline-block; background: #d1fae5; color: #059669; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+              ${receipt.paymentStatus?.toUpperCase()}
+            </span>
+          </div>
         </div>
 
-        <div class="section">
-          <div class="section-title">Session Details</div>
-          ${receipt.sessionTitle ? `<div class="row"><span class="label">Session</span><span class="value">${receipt.sessionTitle}</span></div>` : ""}
-          ${receipt.sessionSubject ? `<div class="row"><span class="label">Subject</span><span class="value">${receipt.sessionSubject}</span></div>` : ""}
-          ${receipt.tutorName ? `<div class="row"><span class="label">Tutor</span><span class="value">${receipt.tutorName}</span></div>` : ""}
-          <div class="row"><span class="label">Date</span><span class="value">${dateStr}</span></div>
-          ${receipt.sessionDuration ? `<div class="row"><span class="label">Duration</span><span class="value">${receipt.sessionDuration} minutes</span></div>` : ""}
-          ${receipt.sessionLocation ? `<div class="row"><span class="label">Location</span><span class="value">${receipt.sessionLocation}</span></div>` : ""}
+        <div style="margin-bottom: 20px;">
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #9ca3af; margin-bottom: 10px;">Session Details</div>
+          ${receipt.sessionTitle ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;"><span style="color: #6b7280;">Session</span><span style="font-weight: 600; color: #1a1a1a;">${receipt.sessionTitle}</span></div>` : ""}
+          ${receipt.sessionSubject ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;"><span style="color: #6b7280;">Subject</span><span style="font-weight: 600; color: #1a1a1a;">${receipt.sessionSubject}</span></div>` : ""}
+          ${receipt.tutorName ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;"><span style="color: #6b7280;">Tutor</span><span style="font-weight: 600; color: #1a1a1a;">${receipt.tutorName}</span></div>` : ""}
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;"><span style="color: #6b7280;">Date</span><span style="font-weight: 600; color: #1a1a1a;">${dateStr}</span></div>
+          ${receipt.sessionDuration ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;"><span style="color: #6b7280;">Duration</span><span style="font-weight: 600; color: #1a1a1a;">${receipt.sessionDuration} minutes</span></div>` : ""}
+          ${receipt.sessionLocation ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;"><span style="color: #6b7280;">Location</span><span style="font-weight: 600; color: #1a1a1a;">${receipt.sessionLocation}</span></div>` : ""}
         </div>
 
-        <hr class="divider" />
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 16px 0;" />
 
-        <div class="amount-row">
-          <span class="label">Amount Paid</span>
-          <span class="value">${amountStr}</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0;">
+          <span style="font-size: 14px; font-weight: 600; color: #374151;">Amount Paid</span>
+          <span style="font-size: 24px; font-weight: 800; color: #059669;">${amountStr}</span>
         </div>
 
-        ${receipt.stripeSessionId ? `<div class="txn-id"><span class="label">Transaction ID</span><span class="value">${receipt.stripeSessionId}</span></div>` : ""}
+        ${receipt.stripeSessionId ? `<div style="background: #f3f4f6; padding: 12px; border-radius: 8px; margin-top: 16px;"><span style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #9ca3af; display: block; margin-bottom: 4px;">Transaction ID</span><span style="font-size: 10px; color: #6b7280; word-break: break-all; font-family: monospace;">${receipt.stripeSessionId}</span></div>` : ""}
 
-        <div class="footer">
+        <div style="text-align: center; margin-top: 32px; padding-top: 20px; border-top: 2px solid #e5e7eb; font-size: 11px; color: #9ca3af;">
           <p>Thank you for using SkillBridge!</p>
           <p style="margin-top: 4px;">Booking ID: ${receipt.bookingId}</p>
         </div>
-      </body>
-      </html>
+      </div>
     `;
 
-    const printWindow = window.open("", "_blank");
-    if (printWindow) {
-      printWindow.document.write(html);
-      printWindow.document.close();
-      printWindow.onload = () => {
-        printWindow.print();
-      };
-    }
+    const opt = {
+      margin: 0.5,
+      filename: `Receipt-${receipt.bookingId}.pdf`,
+      image: { type: "jpeg" as const, quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" as const },
+    };
+
+    // Generate and trigger actual file download
+    html2pdf().set(opt).from(element).save();
   };
 
   return (
