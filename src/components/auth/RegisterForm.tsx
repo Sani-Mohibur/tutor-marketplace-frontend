@@ -27,28 +27,33 @@ export default function RegisterForm() {
     setLoading(true);
 
     try {
-      // 1. Create the user account
+      // 1. Create the user account with proper error hooks
       await authClient.signUp.email({
         email: formData.email,
         password: formData.password,
         name: formData.name,
         role,
+        fetchOptions: {
+          onError: (ctx: any) => {
+            toast.error(ctx.error.message || "Email already exists.");
+            setLoading(false);
+          },
+          onSuccess: async () => {
+            toast.success("Account constructed! Authenticating session...");
+
+            // 2. Only sign them in if the registration succeeded
+            await authClient.signIn.email({
+              email: formData.email,
+              password: formData.password,
+              callbackURL: "/profile/edit",
+            });
+
+            router.refresh();
+          },
+        },
       } as any);
-
-      toast.success("Account constructed! Authenticating session...");
-
-      // 2. Immediately sign them in to generate the session cookies
-      await authClient.signIn.email({
-        email: formData.email,
-        password: formData.password,
-        callbackURL: "/profile/edit",
-      });
-
-      // toast.success("Access authorized! Redirecting...");
-      router.refresh();
     } catch (err: any) {
-      toast.error(err?.message || "An authentication error occurred.");
-    } finally {
+      toast.error("An authentication error occurred.");
       setLoading(false);
     }
   };
