@@ -6,11 +6,11 @@ import { Tutor } from "@/components/tutors/TutorCard";
 
 // Server-side fetching logic
 async function getFeaturedTutors(): Promise<Tutor[]> {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   try {
     // Request a higher limit to capture available featured options across records
-    const response = await fetch(`${apiUrl}/tutor/search?limit=30`, {
+    const response = await fetch(`${backendUrl}/api/tutor/search?limit=30`, {
       next: { revalidate: 600 },
     });
 
