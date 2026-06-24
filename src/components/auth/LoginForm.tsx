@@ -13,6 +13,7 @@ export default function LoginForm() {
   const router = useRouter();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,10 +24,9 @@ export default function LoginForm() {
         email: formData.email,
         password: formData.password,
         fetchOptions: {
-          onSuccess: async (ctx) => {
+          onSuccess: async (ctx: any) => {
             toast.success("Welcome back! Access granted.");
 
-            // Pull the user role from the response context or auth client state
             const userRole = ctx?.data?.user?.role;
 
             setTimeout(() => {
@@ -41,7 +41,8 @@ export default function LoginForm() {
               router.refresh();
             }, 800);
           },
-          onError: (ctx) => {
+          onError: (ctx: any) => {
+            setShowForgotPassword(true); // Show button on failure
             toast.error(
               ctx.error.message || "Invalid security token or credentials.",
             );
@@ -49,7 +50,6 @@ export default function LoginForm() {
         },
       });
     } catch (err: any) {
-      // Fallback for unexpected structural connection drops
       toast.error("Network connection refused. Check backend lifecycle.");
     } finally {
       setLoading(false);
@@ -94,14 +94,12 @@ export default function LoginForm() {
           </div>
 
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <Label
-                htmlFor="password"
-                className="text-[10px] font-extrabold tracking-widest text-muted-foreground uppercase"
-              >
-                Security Token
-              </Label>
-            </div>
+            <Label
+              htmlFor="password"
+              className="text-[10px] font-extrabold tracking-widest text-muted-foreground uppercase"
+            >
+              Security Token
+            </Label>
             <Input
               id="password"
               type="password"
@@ -113,6 +111,17 @@ export default function LoginForm() {
               className="h-11 rounded-xl bg-background/50 focus-visible:ring-blue-500/20 focus-visible:border-blue-500 transition-all duration-300"
               placeholder="••••••••"
             />
+            {showForgotPassword && (
+              <div className="flex justify-end pt-0.5 animate-in fade-in slide-in-from-top-1 duration-200">
+                <button
+                  type="button"
+                  onClick={() => router.push("/forgot-password")}
+                  className="cursor-pointer text-xs font-semibold text-emerald-500 hover:text-emerald-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+                >
+                  Forgot Password?
+                </button>
+              </div>
+            )}
           </div>
 
           <Button

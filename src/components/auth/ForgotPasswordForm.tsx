@@ -1,0 +1,113 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+export default function ForgotPasswordForm() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      await authClient.requestPasswordReset({
+        email,
+        redirectTo: "/reset-password",
+        fetchOptions: {
+          onSuccess: () => {
+            setSubmitted(true);
+            toast.success(
+              "Password reset email sent. Please check your inbox.",
+            );
+          },
+          onError: (ctx: any) => {
+            toast.error(ctx.error.message || "Failed to send reset email.");
+          },
+        },
+      });
+    } catch (err: any) {
+      toast.error("Network connection refused. Check backend lifecycle.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="relative group w-full max-w-md">
+      {/* Premium Ambient Background Glow effect */}
+      <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-teal-500 via-blue-500 to-indigo-600 dark:from-blue-500 dark:via-cyan-500 dark:to-indigo-600 opacity-20 blur-xl group-hover:opacity-30 transition duration-1000" />
+
+      {/* Glassmorphism Card Wrapper */}
+      <div className="relative border border-border/80 bg-background/80 backdrop-blur-xl rounded-2xl p-8 shadow-2xl space-y-6">
+        <div className="space-y-2">
+          <h1 className="text-2xl font-black tracking-tight text-foreground">
+            Forgot Password
+          </h1>
+          <p className="text-xs font-medium text-muted-foreground">
+            {submitted
+              ? "We've sent a recovery link to your email address."
+              : "Enter your email to receive a password reset link."}
+          </p>
+        </div>
+
+        {!submitted ? (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-1.5">
+              <Label
+                htmlFor="email"
+                className="text-[10px] font-extrabold tracking-widest text-muted-foreground uppercase"
+              >
+                Email Address
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="h-11 rounded-xl bg-background/50 focus-visible:ring-blue-500/20 focus-visible:border-blue-500 transition-all duration-300"
+                placeholder="name@domain.com"
+              />
+            </div>
+
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full h-11 rounded-xl bg-gradient-to-r from-teal-600 via-blue-600 to-indigo-600 dark:from-blue-600 dark:via-cyan-600 dark:to-indigo-600 hover:from-teal-500 hover:to-indigo-500 dark:hover:from-blue-500 dark:hover:to-indigo-500 text-white font-bold tracking-wide shadow-lg shadow-blue-600/10 transition-all duration-300 mt-4 cursor-pointer"
+            >
+              {loading ? "Sending..." : "Send Reset Link"}
+            </Button>
+
+            <div className="mt-4 text-center">
+              <button
+                type="button"
+                onClick={() => router.push("/login")}
+                className="text-xs font-semibold text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+              >
+                Back to Sign In
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div className="space-y-4 pt-4">
+            <Button
+              onClick={() => router.push("/login")}
+              className="w-full h-11 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground font-bold tracking-wide transition-all duration-300"
+            >
+              Return to Login
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
