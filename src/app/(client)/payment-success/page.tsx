@@ -41,6 +41,7 @@ function PaymentSuccessPage() {
   const [showConfetti, setShowConfetti] = useState(true);
   const [receipt, setReceipt] = useState<ReceiptData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowConfetti(false), 3000);
@@ -83,68 +84,38 @@ function PaymentSuccessPage() {
   };
 
   const generateReceiptPDF = async () => {
-    if (!receipt) return;
+    if (!sessionId || !receipt) return;
 
-    // Dynamically import to avoid Next.js SSR window errors
-    const html2pdf = (await import("html2pdf.js")).default;
+    try {
+      setIsDownloading(true);
+      // Fetch the binary PDF stream from the backend
+      const res = await fetch(
+        `${API_BASE}/payments/receipt/${sessionId}/download`,
+        {
+          credentials: "include",
+        },
+      );
 
-    const dateStr = receipt.sessionDate
-      ? new Date(receipt.sessionDate).toLocaleDateString(undefined, {
-          dateStyle: "long",
-        })
-      : "N/A";
-    const amountStr = formatCurrency(receipt.amount, receipt.currency);
+      if (!res.ok) throw new Error("Failed to download PDF");
 
-    // Create a temporary container with inline styles (required for html2pdf)
-    const element = document.createElement("div");
-    element.innerHTML = `
-      <div style="font-family: 'Segoe UI', system-ui, sans-serif; padding: 40px; color: #1a1a1a; max-width: 600px; margin: 0 auto;">
-        <div style="text-align: center; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 2px solid #e5e7eb;">
-          <h1 style="font-size: 22px; font-weight: 800; color: #059669; margin-bottom: 4px;">✅ Payment Receipt</h1>
-          <p style="font-size: 12px; color: #6b7280;">SkillBridge — Tutoring Platform</p>
-          <div style="margin-top: 10px;">
-            <span style="display: inline-block; background: #d1fae5; color: #059669; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
-              ${receipt.paymentStatus?.toUpperCase()}
-            </span>
-          </div>
-        </div>
+      const blob = await res.blob();
 
-        <div style="margin-bottom: 20px;">
-          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #9ca3af; margin-bottom: 10px;">Session Details</div>
-          ${receipt.sessionTitle ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;"><span style="color: #6b7280;">Session</span><span style="font-weight: 600; color: #1a1a1a;">${receipt.sessionTitle}</span></div>` : ""}
-          ${receipt.sessionSubject ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;"><span style="color: #6b7280;">Subject</span><span style="font-weight: 600; color: #1a1a1a;">${receipt.sessionSubject}</span></div>` : ""}
-          ${receipt.tutorName ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;"><span style="color: #6b7280;">Tutor</span><span style="font-weight: 600; color: #1a1a1a;">${receipt.tutorName}</span></div>` : ""}
-          <div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;"><span style="color: #6b7280;">Date</span><span style="font-weight: 600; color: #1a1a1a;">${dateStr}</span></div>
-          ${receipt.sessionDuration ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;"><span style="color: #6b7280;">Duration</span><span style="font-weight: 600; color: #1a1a1a;">${receipt.sessionDuration} minutes</span></div>` : ""}
-          ${receipt.sessionLocation ? `<div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;"><span style="color: #6b7280;">Location</span><span style="font-weight: 600; color: #1a1a1a;">${receipt.sessionLocation}</span></div>` : ""}
-        </div>
+      // Create a temporary hidden link to trigger the browser download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Receipt-${receipt.bookingId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
 
-        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 16px 0;" />
-
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0;">
-          <span style="font-size: 14px; font-weight: 600; color: #374151;">Amount Paid</span>
-          <span style="font-size: 24px; font-weight: 800; color: #059669;">${amountStr}</span>
-        </div>
-
-        ${receipt.stripeSessionId ? `<div style="background: #f3f4f6; padding: 12px; border-radius: 8px; margin-top: 16px;"><span style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #9ca3af; display: block; margin-bottom: 4px;">Transaction ID</span><span style="font-size: 10px; color: #6b7280; word-break: break-all; font-family: monospace;">${receipt.stripeSessionId}</span></div>` : ""}
-
-        <div style="text-align: center; margin-top: 32px; padding-top: 20px; border-top: 2px solid #e5e7eb; font-size: 11px; color: #9ca3af;">
-          <p>Thank you for using SkillBridge!</p>
-          <p style="margin-top: 4px;">Booking ID: ${receipt.bookingId}</p>
-        </div>
-      </div>
-    `;
-
-    const opt = {
-      margin: 0.5,
-      filename: `Receipt-${receipt.bookingId}.pdf`,
-      image: { type: "jpeg" as const, quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" as const },
-    };
-
-    // Generate and trigger actual file download
-    html2pdf().set(opt).from(element).save();
+      // Cleanup
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    } catch (error) {
+      console.error("Download error:", error);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -286,10 +257,15 @@ function PaymentSuccessPage() {
           {receipt && (
             <button
               onClick={generateReceiptPDF}
-              className="w-full h-11 flex items-center justify-center gap-2 text-xs font-bold rounded-xl border-2 border-emerald-500/30 dark:border-blue-500/30 text-emerald-600 dark:text-blue-400 hover:bg-emerald-500/5 dark:hover:bg-blue-500/5 transition-colors cursor-pointer"
+              disabled={isDownloading}
+              className="w-full h-11 flex items-center justify-center gap-2 text-xs font-bold rounded-xl border-2 border-emerald-500/30 dark:border-blue-500/30 text-emerald-600 dark:text-blue-400 hover:bg-emerald-500/5 dark:hover:bg-blue-500/5 transition-colors cursor-pointer disabled:opacity-50"
             >
-              <Download className="w-3.5 h-3.5" />
-              Download Receipt as PDF
+              {isDownloading ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <Download className="w-3.5 h-3.5" />
+              )}
+              {isDownloading ? "Generating PDF..." : "Download Receipt as PDF"}
             </button>
           )}
           <Link
