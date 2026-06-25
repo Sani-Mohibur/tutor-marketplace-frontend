@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Skill Bridge - Tutor Marketplace",
+  title: "SkillBridge 2.0 | Tutor Marketplace & Secure Payments",
   description:
     "Find expert tutors for your learning sessions with flexible scheduling",
   // icons: {
