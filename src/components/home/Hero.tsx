@@ -15,17 +15,22 @@ export default function Hero() {
         <div className="max-w-4xl">
           {/* Headline with Brand Accent Color */}
           <h1 className="text-3xl font-bold tracking-tight text-black dark:text-white sm:text-5xl lg:text-6xl drop-shadow-md">
-            Bridge the Gap to{" "}
+            {/* Bridge the Gap to{" "} */}
+            Find the Right Tutor{" "}
             <span className="text-[#00bfa5] dark:text-[#00e5ff]">
-              Expert Knowledge
+              {/* Expert Knowledge */}
+              Learn with Confidence
             </span>
           </h1>
 
           {/* Subtitle description */}
           <p className="mx-auto mt-6 max-w-2xl text-base sm:text-lg leading-7 text-slate-200 dark:text-slate-300 drop-shadow-sm font-medium">
-            Connect instantly with verified elite tutors across any field.
+            {/* Connect instantly with verified elite tutors across any field.
             Secure your custom learning slot, track your interactive sessions,
-            and scale your skills today.
+            and scale your skills today. */}
+            Find expert tutors for your learning needs, view their available
+            time slots, book sessions easily, and improve your skills through a
+            trusted platform designed for effective learning.
           </p>
         </div>
       </div>

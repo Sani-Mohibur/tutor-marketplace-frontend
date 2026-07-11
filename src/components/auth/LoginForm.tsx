@@ -78,7 +78,7 @@ export default function LoginForm() {
               htmlFor="email"
               className="text-[10px] font-extrabold tracking-widest text-muted-foreground uppercase"
             >
-              Email Hub
+              Email Address
             </Label>
             <Input
               id="email"
@@ -89,7 +89,7 @@ export default function LoginForm() {
                 setFormData({ ...formData, email: e.target.value })
               }
               className="h-11 rounded-xl bg-background/50 focus-visible:ring-blue-500/20 focus-visible:border-blue-500 transition-all duration-300"
-              placeholder="name@domain.com"
+              placeholder="Enter your email"
             />
           </div>
 
@@ -98,7 +98,7 @@ export default function LoginForm() {
               htmlFor="password"
               className="text-[10px] font-extrabold tracking-widest text-muted-foreground uppercase"
             >
-              Security Token
+              Password
             </Label>
             <Input
               id="password"
@@ -109,7 +109,7 @@ export default function LoginForm() {
                 setFormData({ ...formData, password: e.target.value })
               }
               className="h-11 rounded-xl bg-background/50 focus-visible:ring-blue-500/20 focus-visible:border-blue-500 transition-all duration-300"
-              placeholder="••••••••"
+              placeholder="Enter your password"
             />
             {showForgotPassword && (
               <div className="flex justify-end pt-0.5 animate-in fade-in slide-in-from-top-1 duration-200">

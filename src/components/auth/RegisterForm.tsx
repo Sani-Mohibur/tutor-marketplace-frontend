@@ -79,24 +79,22 @@ export default function RegisterForm() {
           <button
             type="button"
             onClick={() => setRole("student")}
-            className={`h-9 rounded-lg text-xs font-bold tracking-wide transition-all duration-300 relative z-10 cursor-pointer ${
-              role === "student"
-                ? "bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-blue-600 dark:to-cyan-600 text-white shadow-md shadow-emerald-900/10 dark:shadow-blue-900/10"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
+            className={`h-9 rounded-lg text-xs font-bold tracking-wide transition-all duration-300 relative z-10 cursor-pointer ${role === "student"
+              ? "bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-blue-600 dark:to-cyan-600 text-white shadow-md shadow-emerald-900/10 dark:shadow-blue-900/10"
+              : "text-muted-foreground hover:text-foreground"
+              }`}
           >
-            Student Track
+            Student
           </button>
           <button
             type="button"
             onClick={() => setRole("tutor")}
-            className={`h-9 rounded-lg text-xs font-bold tracking-wide transition-all duration-300 relative z-10 cursor-pointer ${
-              role === "tutor"
-                ? "bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-blue-600 dark:to-cyan-600 text-white shadow-md shadow-emerald-900/10 dark:shadow-blue-900/10"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
+            className={`h-9 rounded-lg text-xs font-bold tracking-wide transition-all duration-300 relative z-10 cursor-pointer ${role === "tutor"
+              ? "bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-blue-600 dark:to-cyan-600 text-white shadow-md shadow-emerald-900/10 dark:shadow-blue-900/10"
+              : "text-muted-foreground hover:text-foreground"
+              }`}
           >
-            Expert Mentor
+            Mentor
           </button>
         </div>
 
@@ -126,7 +124,7 @@ export default function RegisterForm() {
               htmlFor="email"
               className="text-[10px] font-extrabold tracking-widest text-muted-foreground uppercase"
             >
-              Email Hub
+              Email Address
             </Label>
             <Input
               id="email"
@@ -137,7 +135,7 @@ export default function RegisterForm() {
                 setFormData({ ...formData, email: e.target.value })
               }
               className="h-11 rounded-xl bg-background/50 focus-visible:ring-emerald-500/20 focus-visible:border-emerald-500 dark:focus-visible:ring-blue-500/20 dark:focus-visible:border-blue-500 transition-all duration-300"
-              placeholder="name@domain.com"
+              placeholder="Enter your email"
             />
           </div>
 
@@ -146,7 +144,7 @@ export default function RegisterForm() {
               htmlFor="password"
               className="text-[10px] font-extrabold tracking-widest text-muted-foreground uppercase"
             >
-              Security Token
+              Password
             </Label>
             <Input
               id="password"
@@ -157,7 +155,7 @@ export default function RegisterForm() {
                 setFormData({ ...formData, password: e.target.value })
               }
               className="h-11 rounded-xl bg-background/50 focus-visible:ring-emerald-500/20 focus-visible:border-emerald-500 dark:focus-visible:ring-blue-500/20 dark:focus-visible:border-blue-500 transition-all duration-300"
-              placeholder="••••••••"
+              placeholder="Enter your password"
             />
           </div>
 
