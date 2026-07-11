@@ -95,11 +95,11 @@ export function TutorCard({ tutor }: TutorCardProps) {
         </div>
 
         {/* Categories / Tag Badges Stack */}
-        <div className="flex flex-wrap gap-1 mt-4">
+        <div className="flex flex-wrap gap-1 mt-4 max-h-18 overflow-hidden">
           {tutor.categories.map((category) => (
             <span
               key={category}
-              className="text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-md bg-muted text-muted-foreground border border-border/30"
+              className="text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-md bg-muted text-muted-foreground border border-gray-300 dark:border-border/40"
             >
               {category}
             </span>
@@ -107,7 +107,7 @@ export function TutorCard({ tutor }: TutorCardProps) {
         </div>
 
         {/* Short Text Description Bio */}
-        <p className="text-xs text-muted-foreground line-clamp-2 mt-3 leading-relaxed">
+        <p className="text-xs text-muted-foreground line-clamp-3 mt-3 leading-relaxed">
           {tutor.bio}
         </p>
 

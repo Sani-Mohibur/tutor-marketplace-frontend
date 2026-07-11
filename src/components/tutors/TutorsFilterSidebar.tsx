@@ -123,7 +123,7 @@ export function TutorsFilterSidebar({
               {filterContents}
             </div>
 
-            <div className="pt-4 border-t border-border flex gap-2 shrink-0">
+            <div className="pt-4 border-t border-border flex flex-col gap-2 shrink-0">
               <Button
                 variant="outline"
                 onClick={() => {

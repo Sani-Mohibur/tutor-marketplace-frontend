@@ -24,7 +24,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
 
   return (
     <div className="border border-border/60 bg-gradient-to-br from-background to-muted/10 rounded-xl p-4 space-y-3 hover:border-border/80 transition-all duration-200 shadow-xs hover:shadow-sm">
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4">
         <div>
           <h4 className="text-xs font-bold text-foreground">
             Review for {tutorName}

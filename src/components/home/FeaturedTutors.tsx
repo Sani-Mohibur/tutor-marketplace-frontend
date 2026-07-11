@@ -12,9 +12,7 @@ interface FeaturedTutorsProps {
 export function FeaturedTutors({ initialFeaturedTutors }: FeaturedTutorsProps) {
   const [visibleCount, setVisibleCount] = useState(6);
 
-  const featuredTutors = initialFeaturedTutors.filter(
-    (tutor) => tutor.isFeatured,
-  );
+  const featuredTutors = initialFeaturedTutors;
   const hasMore = visibleCount < featuredTutors.length;
 
   const handleShowMore = () => {

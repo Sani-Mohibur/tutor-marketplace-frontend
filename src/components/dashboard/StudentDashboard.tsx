@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Clock, CheckCircle2, DollarSign } from "lucide-react";
+import { Clock, CheckCircle2, DollarSign, Info } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 interface DashboardStats {
   totalHours: number;
@@ -33,6 +34,17 @@ export default function StudentDashboardView() {
     fetchStats();
   }, []);
 
+  const InfoTooltip = ({ content }: { content: React.ReactNode }) => (
+    <Popover>
+      <PopoverTrigger className="absolute bottom-4 right-4 p-1 rounded-full hover:bg-muted transition-colors">
+        <Info className="w-4 h-4 text-muted-foreground" />
+      </PopoverTrigger>
+      <PopoverContent className="w-80 text-xs text-muted-foreground leading-relaxed">
+        {content}
+      </PopoverContent>
+    </Popover>
+  );
+
   return (
     <div className="min-h-screen w-full bg-background pt-16 pb-16 px-4 max-w-7xl mx-auto space-y-16">
       {/* Header Section */}
@@ -60,16 +72,15 @@ export default function StudentDashboardView() {
       {/* Minimal Premium Unified Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Total Hours */}
-        <div className="group relative rounded-2xl bg-card border border-border/50 p-6 transition-all duration-300 hover:border-cyan-500/30 hover:shadow-md dark:hover:bg-cyan-500/[0.02]">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold tracking-wider uppercase text-muted-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
-              Total Study Hours
-            </span>
+        <div className="group relative rounded-2xl bg-card border border-gray-300 dark:border-border/50 p-6 transition-all duration-300 hover:border-cyan-500/30 hover:shadow-md dark:hover:bg-cyan-500/[0.02]">
+          <div className="flex items-center gap-2">
             <div className="p-2 rounded-xl bg-cyan-500/5 text-zinc-400 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 group-hover:bg-cyan-500/10 transition-all">
               <Clock className="w-4 h-4" />
             </div>
+            <span className="text-xs font-bold tracking-wider uppercase text-muted-foreground group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+              Total Study Hours
+            </span>
           </div>
-
           <div className="mt-4">
             <h2 className="text-3xl font-black tracking-tight text-foreground">
               {isLoading ? "— —" : stats?.totalHours || 0}
@@ -80,20 +91,26 @@ export default function StudentDashboardView() {
             <p className="mt-1 text-[11px] text-muted-foreground/80">
               Recorded learning session metrics.
             </p>
+
+            <InfoTooltip content={
+              <div className="space-y-2">
+                <p>Completed sessions appear here only after the tutor marks the session as completed. After your class ends, it may take some time for this page to update.</p>
+                <p>The session duration shown here is based on the scheduled slot time. If a class runs longer than scheduled and the tutor does not update the session time, the extra duration will not be reflected.</p>
+              </div>
+            } />
           </div>
         </div>
 
         {/* Passed Sessions */}
-        <div className="group relative rounded-2xl bg-card border border-border/50 p-6 transition-all duration-300 hover:border-emerald-500/30 hover:shadow-md dark:hover:bg-emerald-500/[0.02]">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold tracking-wider uppercase text-muted-foreground group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-              Passed Sessions
-            </span>
+        <div className="group relative rounded-2xl bg-card border border-gray-300 dark:border-border/50 p-6 transition-all duration-300 hover:border-emerald-500/30 hover:shadow-md dark:hover:bg-emerald-500/[0.02]">
+          <div className="flex items-center gap-2">
             <div className="p-2 rounded-xl bg-emerald-500/5 text-zinc-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 group-hover:bg-emerald-500/10 transition-all">
               <CheckCircle2 className="w-4 h-4" />
             </div>
+            <span className="text-xs font-bold tracking-wider uppercase text-muted-foreground group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+              Passed Sessions
+            </span>
           </div>
-
           <div className="mt-4">
             <h2 className="text-3xl font-black tracking-tight text-foreground">
               {isLoading ? "— —" : stats?.totalCompleteSessions || 0}
@@ -104,20 +121,20 @@ export default function StudentDashboardView() {
             <p className="mt-1 text-[11px] text-muted-foreground/80">
               Completed mentorship updates.
             </p>
+            <InfoTooltip content="Completed sessions appear here only after the tutor marks the session as completed. After your class ends, it may take some time for this page to update." />
           </div>
         </div>
 
         {/* Total Investment */}
-        <div className="group relative rounded-2xl bg-card border border-border/50 p-6 transition-all duration-300 hover:border-amber-500/30 hover:shadow-md dark:hover:bg-amber-500/[0.02]">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold tracking-wider uppercase text-muted-foreground group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
-              Total Investment
-            </span>
+        <div className="group relative rounded-2xl bg-card border border-gray-300 dark:border-border/50 p-6 transition-all duration-300 hover:border-amber-500/30 hover:shadow-md dark:hover:bg-amber-500/[0.02]">
+          <div className="flex items-center gap-2">
             <div className="p-2 rounded-xl bg-amber-500/5 text-zinc-400 group-hover:text-amber-600 dark:group-hover:text-amber-400 group-hover:bg-amber-500/10 transition-all">
               <DollarSign className="w-4 h-4" />
             </div>
+            <span className="text-xs font-bold tracking-wider uppercase text-muted-foreground group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+              Total Investment
+            </span>
           </div>
-
           <div className="mt-4">
             <h2 className="text-3xl font-black tracking-tight text-foreground transition-colors">
               {isLoading ? "— —" : `$${stats?.totalCost?.toFixed(2) || "0.00"}`}
@@ -125,6 +142,13 @@ export default function StudentDashboardView() {
             <p className="mt-1 text-[11px] text-muted-foreground/80">
               Allocated knowledge capital.
             </p>
+            <InfoTooltip content={
+              <div className="space-y-2">
+                <p>Completed sessions appear here only after the tutor marks the session as completed. After your class ends, it may take some time for this page to update.</p>
+                <p>Only online payments made through Stripe are displayed here. Classes paid using Cash on Delivery (COD) are not included.</p>
+                <p>Stripe payments for upcoming or incomplete sessions will not appear here until the tutor marks the session as completed.</p>
+              </div>
+            } />
           </div>
         </div>
       </div>

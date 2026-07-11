@@ -88,7 +88,7 @@ export default function DedicatedTutorReviewsPage() {
           </p>
         </div>
 
-        <div className="ml-auto bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full px-3 py-1 text-xs font-bold text-foreground">
+        <div className="whitespace-nowrap ml-auto bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full px-3 py-1 text-xs font-bold text-foreground">
           {reviews.length} Logs
         </div>
       </div>

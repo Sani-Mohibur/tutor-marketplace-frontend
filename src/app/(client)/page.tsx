@@ -10,7 +10,7 @@ async function getFeaturedTutors(): Promise<Tutor[]> {
 
   try {
     // Request a higher limit to capture available featured options across records
-    const response = await fetch(`${backendUrl}/api/tutor/search?limit=30`, {
+    const response = await fetch(`${backendUrl}/api/tutor/featured`, {
       next: { revalidate: 600 },
     });
 
@@ -28,15 +28,18 @@ async function getFeaturedTutors(): Promise<Tutor[]> {
     return json.data.map((item: any) => ({
       id: item.id,
       name: item.name || item.user?.name || "Anonymous",
-      image: item.image || undefined,
-      isVerified: item.isVerified || false,
-      isFeatured: item.isFeatured || false,
-      rating: item.rating || 0,
-      reviewCount: item.reviewCount || 0,
+      user: {
+        image: item.user?.image,
+      },
+      isVerified: item.isVerified ?? false,
+      isFeatured: item.isFeatured ?? false,
+
+      rating: item.rating ?? 0,
+      reviewCount: item.reviewCount ?? 0,
       categories: Array.isArray(item.categories) ? item.categories : [],
-      bio: item.bio || "No biography details available.",
-      pricePerHour: item.pricePerHour || 0,
-      experienceYears: item.experienceYears || 0,
+      bio: item.bio ?? "No biography details available.",
+      pricePerHour: item.pricePerHour ?? 0,
+      experienceYears: item.experienceYears ?? 0,
     }));
   } catch (error) {
     console.error("Error loading featured tutors sequence:", error);
