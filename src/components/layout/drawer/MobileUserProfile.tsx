@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 interface MobileUserProfileProps {
   session: any;
 }
@@ -10,9 +12,11 @@ export function MobileUserProfile({ session }: MobileUserProfileProps) {
   return (
     <div className="flex items-center gap-3 p-2.5 rounded-xl bg-muted/40 border border-border/40">
       {user?.image ? (
-        <img
+        <Image
           src={user.image}
           alt={user.name || "User"}
+          width={40}
+          height={40}
           className="w-10 h-10 rounded-xl object-cover border border-border"
         />
       ) : (

@@ -10,6 +10,7 @@ import {
   Award,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export interface Tutor {
   id: string;
@@ -33,18 +34,20 @@ interface TutorCardProps {
 
 export function TutorCard({ tutor }: TutorCardProps) {
   return (
-    <div className="group relative bg-gradient-to-br from-slate-50 via-indigo-50/60 to-violet-100/40 dark:from-slate-950 dark:via-indigo-950/40 dark:to-violet-950/40 border rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 shadow-xs hover:shadow-lg hover:border-emerald-500/40 dark:hover:border-blue-500/40 hover:shadow-emerald-500/5 dark:hover:shadow-blue-500/5">
+    <div className="group relative bg-gradient-to-br from-slate-50 via-indigo-50/60 to-violet-100/40 dark:from-slate-950 dark:via-indigo-950/40 dark:to-violet-950/40 border rounded-[var(--radius-xl)] p-6 flex flex-col justify-between transition-all duration-300 shadow-xs hover:shadow-lg hover:border-emerald-500/40 dark:hover:border-blue-500/40 hover:shadow-emerald-500/5 dark:hover:shadow-blue-500/5">
       {/* Premium Ambient Background Hover Meshes */}
-      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.12),transparent_40%),radial-gradient(circle_at_top_right,rgba(20,184,166,0.10),transparent_45%),radial-gradient(circle_at_bottom,rgba(99,102,241,0.08),transparent_50%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.12),transparent_40%),radial-gradient(circle_at_top_right,rgba(6,182,212,0.10),transparent_45%),radial-gradient(circle_at_bottom,rgba(99,102,241,0.08),transparent_50%)]" />
+      <div className="absolute inset-0 rounded-[var(--radius-xl)] opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.12),transparent_40%),radial-gradient(circle_at_top_right,rgba(20,184,166,0.10),transparent_45%),radial-gradient(circle_at_bottom,rgba(99,102,241,0.08),transparent_50%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.12),transparent_40%),radial-gradient(circle_at_top_right,rgba(6,182,212,0.10),transparent_45%),radial-gradient(circle_at_bottom,rgba(99,102,241,0.08),transparent_50%)]" />
       <div>
         {/* Top Header Card Info Row */}
         <div className="flex items-start gap-4">
           {/* Tutor Avatar Frame */}
           <div className="relative shrink-0">
             {tutor.user?.image ? (
-              <img
+              <Image
                 src={tutor.user.image}
                 alt={tutor.name}
+                width={56}
+                height={56}
                 className="w-14 h-14 rounded-xl object-cover border border-border/80"
               />
             ) : (

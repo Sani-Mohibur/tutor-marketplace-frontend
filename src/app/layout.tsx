@@ -20,15 +20,6 @@ export const metadata: Metadata = {
   title: "SkillBridge 2.0 | Tutor Marketplace & Secure Payments",
   description:
     "Find expert tutors for your learning sessions with flexible scheduling",
-  // icons: {
-  //   icon: [
-  //     {
-  //       url: "/icon.svg",
-  //       sizes: "32x32", // Or any target size
-  //       type: "image/svg+xml",
-  //     },
-  //   ],
-  // },
 };
 
 export default function RootLayout({
@@ -58,7 +49,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col" suppressHydrationWarning={true}>
         <ThemeProvider>
           {children}
           <Toaster position="bottom-right" richColors closeButton />

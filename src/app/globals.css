@@ -75,7 +75,7 @@
   --card-border: #232326; /* Ghostly fine framework outlines */
 
   --muted-surface: #18181b; /* Dark contrast section anchors */
-  --muted-text: #9a9a14; /* Highly legible steel secondary font gray */
+  --muted-text: #a1a1aa; /* WCAG AA compliant muted text */
 
   --brand-accent: #10b981; /* Vivid luminous electronic green */
   --brand-hover: #34d399; /* Vibrant accent reaction flare */
@@ -92,7 +92,7 @@
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
+  --border: oklch(0.269 0 0);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.87 0 0);

@@ -12,6 +12,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
+import Image from "next/image";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
@@ -90,9 +91,11 @@ export function ProfileDisplayView({
           {/* Avatar with upload overlay */}
           <div className="relative group">
             {profile.user.image ? (
-              <img
+              <Image
                 src={profile.user.image}
                 alt={profile.user.name}
+                width={64}
+                height={64}
                 className="w-16 h-16 rounded-xl object-cover border-2 border-emerald-500/20 dark:border-blue-500/30"
               />
             ) : (

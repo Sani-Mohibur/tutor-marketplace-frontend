@@ -14,7 +14,7 @@ export default function Hero() {
       <div className="relative mx-auto flex h-full max-w-7xl items-center justify-center px-6 text-center lg:px-8">
         <div className="max-w-4xl">
           {/* Headline with Brand Accent Color */}
-          <h1 className="text-4xl font-bold tracking-tight text-black dark:text-white sm:text-6xl drop-shadow-md">
+          <h1 className="text-3xl font-bold tracking-tight text-black dark:text-white sm:text-5xl lg:text-6xl drop-shadow-md">
             Bridge the Gap to{" "}
             <span className="text-[#00bfa5] dark:text-[#00e5ff]">
               Expert Knowledge

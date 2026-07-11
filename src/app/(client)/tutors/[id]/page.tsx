@@ -19,6 +19,7 @@ import {
 import { PaymentChoiceModal } from "@/components/bookings/student/PaymentChoiceModal";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
+import Image from "next/image";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
@@ -179,11 +180,10 @@ export default function TutorProfileDetailsPage() {
         {/* Main Content Info Block: Column 1 & 2 */}
         <div className="lg:col-span-2 space-y-8">
           <div
-            className={`relative bg-card border rounded-xl p-6 md:p-8 shadow-sm space-y-4 overflow-hidden ${
-              tutor.isFeatured
-                ? "border-amber-500/100 dark:amber-500/30"
-                : "border-border"
-            }`}
+            className={`relative bg-card border rounded-xl p-6 md:p-8 shadow-sm space-y-4 overflow-hidden ${tutor.isFeatured
+              ? "border-amber-500/100 dark:amber-500/30"
+              : "border-border"
+              }`}
           >
             {/* Top Subtle Featured Line Banner Indicator */}
             {/* {tutor.isFeatured && (
@@ -194,9 +194,11 @@ export default function TutorProfileDetailsPage() {
               <div className="flex items-center gap-4">
                 <div className="relative shrink-0">
                   {tutor.user?.image ? (
-                    <img
+                    <Image
                       src={tutor.user.image}
                       alt={tutor.name}
+                      width={64}
+                      height={64}
                       className="w-16 h-16 rounded-full object-cover border border-border/80"
                     />
                   ) : (

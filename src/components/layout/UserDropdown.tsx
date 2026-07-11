@@ -7,6 +7,7 @@ import { LayoutDashboard, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import Image from "next/image";
 
 interface UserDropdownProps {
   session: any;
@@ -49,9 +50,11 @@ export function UserDropdown({ session }: UserDropdownProps) {
           className="focus:outline-none cursor-pointer hover:scale-105 active:scale-95 transition-transform block"
         >
           {session?.user?.image ? (
-            <img
+            <Image
               src={session.user.image}
               alt={session.user.name || "User"}
+              width={36}
+              height={36}
               className="w-9 h-9 rounded-xl object-cover border border-border/80 shadow-inner"
             />
           ) : (
