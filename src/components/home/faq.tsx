@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Plus, Minus } from "lucide-react";
+import Link from "next/link";
 
 const faqData = [
     { q: "What is online tutoring?", a: "Online tutoring is a virtual tutoring service that allows students to connect with expert tutors from anywhere in the world. SkillBridge is an online tutoring platform that offers a wide range of subjects and study materials to help students achieve their academic goals." },
@@ -64,6 +65,39 @@ export default function FAQ() {
                             )}
                         </div>
                     ))}
+                </div>
+
+                {/* CTA Section */}
+                <div className="relative mt-16 overflow-hidden rounded-2xl border border-border bg-emerald-50 dark:bg-slate-950 p-8 sm:p-12 text-center flex flex-col items-center justify-center space-y-4">
+                    {/* Diagonal Line Pattern */}
+                    <div
+                        className="absolute inset-0 opacity-[0.05] dark:opacity-[0.05]"
+                        style={{
+                            backgroundImage: "repeating-linear-gradient(45deg, #10b981 0, #10b981 1px, transparent 0, transparent 50px)",
+                            backgroundSize: "70px 70px"
+                        }}
+                    />
+                    <div
+                        className="absolute inset-0 opacity-0 dark:opacity-[0.05]"
+                        style={{
+                            backgroundImage: "repeating-linear-gradient(45deg, #3b82f6 0, #3b82f6 1px, transparent 0, transparent 50px)",
+                            backgroundSize: "70px 70px"
+                        }}
+                    />
+
+                    <h3 className="relative z-10 text-xl sm:text-2xl font-black tracking-tight text-emerald-950 dark:text-white">
+                        Still have a question?
+                    </h3>
+                    <p className="relative z-10 text-md font-medium text-slate-800 dark:text-slate-400 max-w-md leading-relaxed">
+                        Can't find the answer you're looking for? Please contact our friendly team and we'll get back to you shortly.
+                    </p>
+                    <Link
+                        href="/contact"
+                        className="px-10 py-3 text-lg font-bold tracking-[0.07em] text-slate-900 dark:text-white border border-slate-900/20 dark:border-white/20 hover:border-emerald-600 dark:hover:border-blue-400 transition-all duration-500 hover:scale-[1.02] active:scale-95 cursor-pointer backdrop-blur-sm"
+                    >
+                        Contact Us
+                        <span className="group-hover:translate-x-1 transition-transform duration-300"> →</span>
+                    </Link>
                 </div>
             </div>
         </section>
