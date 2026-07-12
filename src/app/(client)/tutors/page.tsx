@@ -12,6 +12,7 @@ const INITIAL_FILTERS = {
   priceRange: [0, 150] as [number, number],
   minRating: 0,
   selectedCategories: [] as string[],
+  sortOption: "createdAt-desc",
 };
 
 function TutorsContent() {
@@ -28,12 +29,14 @@ function TutorsContent() {
     const maxPrice = Number(searchParams.get("maxPrice")) || 150;
     const minRating = Number(searchParams.get("minRating")) || 0;
     const selectedCategories = searchParams.getAll("categories");
+    const sortOption = searchParams.get("sort") || "createdAt-desc";
 
     return {
       searchName: search,
       priceRange: [minPrice, maxPrice] as [number, number],
       minRating,
       selectedCategories,
+      sortOption,
     };
   }, [searchParams]);
 
@@ -61,6 +64,12 @@ function TutorsContent() {
             maxPrice: filters.priceRange[1].toString(),
           }),
         });
+
+        const sortParams = filters.sortOption.split("-");
+        if (sortParams.length === 2) {
+          queryParams.set("sortBy", sortParams[0]);
+          queryParams.set("sortOrder", sortParams[1]);
+        }
 
         // 2. Format express multi-query array strings correctly for category records
         filters.selectedCategories.forEach((categoryName) => {
@@ -114,6 +123,8 @@ function TutorsContent() {
       params.set("minPrice", updatedFilters.priceRange[0].toString());
     if (updatedFilters.priceRange[1] < 150)
       params.set("maxPrice", updatedFilters.priceRange[1].toString());
+    if (updatedFilters.sortOption !== "createdAt-desc")
+      params.set("sort", updatedFilters.sortOption);
 
     updatedFilters.selectedCategories.forEach((cat) =>
       params.append("categories", cat),

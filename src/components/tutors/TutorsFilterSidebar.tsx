@@ -12,6 +12,7 @@ interface FilterState {
   priceRange: [number, number];
   minRating: number;
   selectedCategories: string[];
+  sortOption: string;
 }
 
 interface TutorsFilterSidebarProps {
@@ -41,8 +42,27 @@ export function TutorsFilterSidebar({
     setFilters((prev) => ({ ...prev, selectedCategories: categories }));
   };
 
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilters((prev) => ({ ...prev, sortOption: e.target.value }));
+  };
+
   const filterContents = (
     <div className="space-y-6">
+      <div className="space-y-3">
+        <label className="text-xs font-bold text-foreground">Sort By</label>
+        <select
+          value={filters.sortOption}
+          onChange={handleSortChange}
+          className="w-full h-9 px-3 text-xs font-medium bg-background border border-border/80 rounded-lg outline-hidden focus:border-emerald-500/40 dark:focus:border-blue-500/40 transition-colors cursor-pointer"
+        >
+          <option value="createdAt-desc">Newest First</option>
+          <option value="rating-desc">Highest Rated</option>
+          <option value="pricePerHour-asc">Price (Low to High)</option>
+          <option value="pricePerHour-desc">Price (High to Low)</option>
+          <option value="experienceYears-desc">Most Experienced</option>
+        </select>
+      </div>
+      <hr className="border-border/40" />
       <CategoryFilter
         categories={availableCategories}
         selectedCategories={filters.selectedCategories}
