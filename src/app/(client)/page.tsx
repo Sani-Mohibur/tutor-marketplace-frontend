@@ -4,6 +4,7 @@ import Hero from "@/components/home/Hero";
 import HowItWorks from "@/components/home/HowItWorks";
 import InfiniteMarquee from "@/components/home/InfiniteMarquee";
 import CallToAction from "@/components/home/CallToAction";
+import FeaturedReviews from "@/components/home/FeaturedReviews";
 import { Tutor } from "@/components/tutors/TutorCard";
 import { headers } from "next/headers";
 import { authClient } from "@/lib/auth-client";
@@ -67,6 +68,7 @@ export default async function HomePage() {
         <HowItWorks />
         <FeaturedCategories />
         <FeaturedTutors initialFeaturedTutors={tutors} />
+        <FeaturedReviews />
         <InfiniteMarquee />
         {!isLoggedIn && <CallToAction />}
       </main>
