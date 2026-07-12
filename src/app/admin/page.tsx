@@ -14,6 +14,8 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import Link from "next/link";
+import { VerificationPieChart } from "@/components/admin/verifications/VerificationPieChart";
+import { FeaturedPieChart } from "@/components/admin/featured/FeaturedPieChart";
 
 interface DashboardStats {
   totalUsers: number;
@@ -161,6 +163,12 @@ export default function AdminOverviewPage() {
         })}
       </div>
 
+      {/* Analytics Row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <VerificationPieChart />
+        <FeaturedPieChart />
+      </div>
+
       {/* Operational Shortcuts Vector Panel */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-card border border-black/5 dark:border-white/5 rounded-2xl p-6 shadow-xs space-y-4">
@@ -178,14 +186,14 @@ export default function AdminOverviewPage() {
               href="/admin/verifications"
               className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/50 dark:hover:bg-slate-900 border border-black/5 dark:border-white/5 text-xs font-bold transition-colors group"
             >
-              <span className="truncate">Process Vetting Queue</span>
+              <span className="truncate">Verify New Tutors</span>
               <ArrowUpRight className="w-4 h-4 text-muted-foreground shrink-0 group-hover:text-foreground transition-colors" />
             </Link>
             <Link
               href="/admin/featured"
               className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/50 dark:hover:bg-slate-900 border border-black/5 dark:border-white/5 text-xs font-bold transition-colors group"
             >
-              <span className="truncate">Configure Showcase Placement</span>
+              <span className="truncate">Feature Top Tutors</span>
               <ArrowUpRight className="w-4 h-4 text-muted-foreground shrink-0 group-hover:text-foreground transition-colors" />
             </Link>
           </div>

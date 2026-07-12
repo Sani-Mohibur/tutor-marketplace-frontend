@@ -54,10 +54,10 @@ export function AdminLayoutClient({ children }: AdminLayoutProps) {
     }
   };
 
-    const navItems = [
+  const navItems = [
     { name: "Overview", href: "/admin", icon: LayoutDashboard },
     { name: "User Directory", href: "/admin/users", icon: Users },
-    { name: "Vetting Queue", href: "/admin/verifications", icon: ShieldCheck },
+    { name: "Verification Approval", href: "/admin/verifications", icon: ShieldCheck },
     { name: "Featured Tutors", href: "/admin/featured", icon: Star },
     // Added operational control links seamlessly below
     { name: "Categories", href: "/admin/categories", icon: FolderKanban },
@@ -89,11 +89,10 @@ export function AdminLayoutClient({ children }: AdminLayoutProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 h-10 rounded-xl text-xs font-bold transition-all ${
-                  isActive
+                className={`flex items-center gap-3 px-4 h-10 rounded-xl text-xs font-bold transition-all ${isActive
                     ? "bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
+                  }`}
               >
                 <Icon className="w-4 h-4 shrink-0" />
                 {item.name}
@@ -178,11 +177,10 @@ export function AdminLayoutClient({ children }: AdminLayoutProps) {
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsMobileOpen(false)}
-                  className={`flex items-center gap-3 px-4 h-12 rounded-xl text-xs font-bold ${
-                    isActive
+                  className={`flex items-center gap-3 px-4 h-12 rounded-xl text-xs font-bold ${isActive
                       ? "bg-slate-900 text-white dark:bg-white dark:text-black"
                       : "text-muted-foreground"
-                  }`}
+                    }`}
                 >
                   <Icon className="w-4.5 h-4.5" />
                   {item.name}

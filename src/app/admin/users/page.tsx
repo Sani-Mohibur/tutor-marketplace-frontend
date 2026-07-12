@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Loader2, Users } from "lucide-react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { UserFilterBar } from "@/components/admin/users/UserFilterBar";
+import { UserGrowthChart } from "@/components/admin/users/UserGrowthChart";
 import { UserRow } from "@/components/admin/users/UserRow";
 import { Pagination } from "@/components/shared/Pagination";
 
@@ -135,6 +136,8 @@ export default function AdminUserDirectoryPage() {
           </p>
         </div>
       </div>
+
+      <UserGrowthChart />
 
       {/* Filter Component Toolbar Context */}
       <UserFilterBar
