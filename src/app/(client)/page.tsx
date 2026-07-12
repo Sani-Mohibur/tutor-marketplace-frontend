@@ -1,8 +1,12 @@
 import FeaturedCategories from "@/components/home/FeaturedCategories";
 import { FeaturedTutors } from "@/components/home/FeaturedTutors";
 import Hero from "@/components/home/Hero";
+import HowItWorks from "@/components/home/HowItWorks";
 import InfiniteMarquee from "@/components/home/InfiniteMarquee";
+import CallToAction from "@/components/home/CallToAction";
 import { Tutor } from "@/components/tutors/TutorCard";
+import { headers } from "next/headers";
+import { authClient } from "@/lib/auth-client";
 
 // Server-side fetching logic
 async function getFeaturedTutors(): Promise<Tutor[]> {
@@ -49,14 +53,22 @@ async function getFeaturedTutors(): Promise<Tutor[]> {
 
 export default async function HomePage() {
   const tutors = await getFeaturedTutors();
+  const session = await authClient.getSession({
+    fetchOptions: {
+      headers: await headers(),
+    },
+  });
+  const isLoggedIn = !!session?.data;
 
   return (
     <div className="relative min-h-screen flex flex-col w-full overflow-x-hidden">
       <main className="flex-grow w-full">
         <Hero />
+        <HowItWorks />
         <FeaturedCategories />
         <FeaturedTutors initialFeaturedTutors={tutors} />
         <InfiniteMarquee />
+        {!isLoggedIn && <CallToAction />}
       </main>
     </div>
   );

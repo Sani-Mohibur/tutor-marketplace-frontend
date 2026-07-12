@@ -194,11 +194,11 @@ export default function InfiniteMarquee() {
   return (
     <section className="w-full py-24 bg-background overflow-hidden relative border-b border-black/5 dark:border-white/5">
       {/* Heading Layout */}
-      <div className="max-w-7xl mx-auto px-4 mb-16">
+      <div className="max-w-7xl mx-auto px-4 mb-16 text-center md:text-left">
         <h2 className="text-3xl font-black tracking-tight text-foreground sm:text-4xl">
           Engineered For Global Success
         </h2>
-        <p className="text-sm text-muted-foreground mt-2 max-w-xl">
+        <p className="mt-3 text-sm font-medium text-muted-foreground max-w-xl leading-relaxed mx-auto md:mx-0">
           A premium mentorship experience meticulously engineered to bridge the
           gap between theory and execution, driving real-world career
           acceleration through elite, tactical guidance.

@@ -29,7 +29,7 @@ export function FeaturedTutors({ initialFeaturedTutors }: FeaturedTutorsProps) {
           <h2 className="text-3xl font-black tracking-tight text-foreground sm:text-4xl">
             Our Featured Tutors
           </h2>
-          <p className="mt-3 text-sm font-medium text-muted-foreground max-w-xl leading-relaxed">
+          <p className="mt-3 text-sm font-medium text-muted-foreground max-w-xl leading-relaxed mx-auto md:mx-0">
             Learn from elite, vetted instructors handpicked for exceptional
             teaching history, deep industry expertise, and proven subject
             mastery to accelerate your growth.
