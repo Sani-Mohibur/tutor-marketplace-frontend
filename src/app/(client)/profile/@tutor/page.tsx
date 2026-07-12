@@ -16,6 +16,7 @@ interface TutorProfileData {
   rating: number;
   reviewCount: number;
   totalHoursTaught: number;
+  images?: string[];
   user: {
     name: string;
     email: string;

@@ -20,6 +20,8 @@ import { PaymentChoiceModal } from "@/components/bookings/student/PaymentChoiceM
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
+import { Lightbox } from "@/components/ui/Lightbox";
+import { ImageIcon } from "lucide-react";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
@@ -36,6 +38,10 @@ export default function TutorProfileDetailsPage() {
     string | null
   >(null);
   const [isPaymentChoiceOpen, setIsPaymentChoiceOpen] = useState(false);
+
+  // Lightbox state
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
     if (!id) return;
@@ -380,6 +386,40 @@ export default function TutorProfileDetailsPage() {
               </div>
             </div>
           )}
+
+          {/* Box 3: Tutor Gallery */}
+          {tutor.images?.length > 0 && (
+            <div className="bg-card border border-border rounded-xl p-6 shadow-sm space-y-4">
+              <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                <ImageIcon className="w-4 h-4 text-emerald-500 dark:text-blue-500" />
+                Tutor Gallery
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {tutor.images.slice(0, 6).map((url: string, index: number) => (
+                  <div 
+                    key={index} 
+                    className="relative aspect-square rounded-lg overflow-hidden border border-border cursor-pointer group"
+                    onClick={() => {
+                      setLightboxIndex(index);
+                      setIsLightboxOpen(true);
+                    }}
+                  >
+                    <Image
+                      src={url}
+                      alt={`Gallery ${index}`}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    {index === 5 && tutor.images.length > 6 && (
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center transition-colors group-hover:bg-black/50">
+                        <span className="text-white font-black text-2xl drop-shadow-md">+{tutor.images.length - 6}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -403,6 +443,17 @@ export default function TutorProfileDetailsPage() {
           toast.success("Booking confirmed! You can pay with cash later.");
         }}
       />
+
+      {/* Lightbox for Gallery */}
+      {tutor.images && (
+        <Lightbox
+          images={tutor.images}
+          currentIndex={lightboxIndex}
+          isOpen={isLightboxOpen}
+          onClose={() => setIsLightboxOpen(false)}
+          onNavigate={(newIndex) => setLightboxIndex(newIndex)}
+        />
+      )}
     </main>
   );
 }

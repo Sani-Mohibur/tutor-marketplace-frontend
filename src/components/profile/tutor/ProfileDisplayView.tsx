@@ -13,6 +13,8 @@ import {
   Tags,
   Camera,
   Loader2,
+  Trash2,
+  ImageIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
@@ -30,6 +32,7 @@ interface ProfileDisplayViewProps {
     pricePerHour: number;
     rating: number;
     reviewCount: number;
+    images?: string[];
     user: { name: string; email: string; image?: string | null };
     categories?: { id: string; name: string }[];
   };
@@ -43,7 +46,10 @@ export function ProfileDisplayView({
   onProfileRefresh,
 }: ProfileDisplayViewProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isGalleryUploading, setIsGalleryUploading] = useState(false);
+  const [isDeletingGalleryImage, setIsDeletingGalleryImage] = useState<string | null>(null);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -88,6 +94,98 @@ export function ProfileDisplayView({
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    if (files.length > 10) {
+      toast.error("You can only upload up to 10 images at once.");
+      return;
+    }
+
+    const currentImageCount = profile.images?.length || 0;
+    if (currentImageCount + files.length > 10) {
+      toast.error(`You can only have up to 10 images in total. You currently have ${currentImageCount}.`);
+      return;
+    }
+
+    setIsGalleryUploading(true);
+    const toastId = toast.loading("Uploading gallery images...");
+
+    try {
+      const formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        formData.append("images", files[i]);
+      }
+
+      // 1. Upload to Cloudinary
+      const res = await fetch(`${API_BASE}/profile/upload-tutor-images`, {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+      const json = await res.json();
+
+      if (json.success && json.data) {
+        const uploadedUrls: string[] = json.data;
+        const newImagesArray = [...(profile.images || []), ...uploadedUrls];
+
+        // 2. Update TutorProfile in database
+        const updateRes = await fetch(`${API_BASE}/profile/update`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ images: newImagesArray }),
+          credentials: "include",
+        });
+        const updateJson = await updateRes.json();
+
+        if (updateJson.success) {
+          toast.success("Gallery updated successfully!", { id: toastId });
+          onProfileRefresh?.();
+        } else {
+          toast.error(updateJson.message || "Failed to update profile.", { id: toastId });
+        }
+      } else {
+        toast.error(json.message || "Failed to upload images.", { id: toastId });
+      }
+    } catch (err) {
+      console.error("Gallery upload error:", err);
+      toast.error("An error occurred while uploading.", { id: toastId });
+    } finally {
+      setIsGalleryUploading(false);
+      if (galleryInputRef.current) galleryInputRef.current.value = "";
+    }
+  };
+
+  const handleDeleteGalleryImage = async (imageUrlToRemove: string) => {
+    setIsDeletingGalleryImage(imageUrlToRemove);
+    const toastId = toast.loading("Removing image...");
+
+    try {
+      const newImagesArray = (profile.images || []).filter((url) => url !== imageUrlToRemove);
+      
+      const updateRes = await fetch(`${API_BASE}/profile/update`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ images: newImagesArray }),
+        credentials: "include",
+      });
+      const updateJson = await updateRes.json();
+
+      if (updateJson.success) {
+        toast.success("Image removed.", { id: toastId });
+        onProfileRefresh?.();
+      } else {
+        toast.error(updateJson.message || "Failed to remove image.", { id: toastId });
+      }
+    } catch (err) {
+      console.error("Gallery delete error:", err);
+      toast.error("An error occurred.", { id: toastId });
+    } finally {
+      setIsDeletingGalleryImage(null);
     }
   };
 
@@ -274,6 +372,71 @@ export function ProfileDisplayView({
             <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-wrap">
               {profile.bio || "No professional biography parameters provided."}
             </p>
+          </div>
+        </div>
+
+        {/* Gallery Section Block */}
+        <div className="flex flex-col gap-4 p-4 bg-zinc-50/50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-800/80 hover:border-emerald-500/30 dark:hover:border-blue-500/30 rounded-xl shadow-xs transition-colors md:col-span-2 w-full">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-2">
+              <ImageIcon className="w-4 h-4 text-emerald-500 dark:text-blue-500" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 block">
+                Tutor Gallery ({(profile.images || []).length}/10)
+              </span>
+            </div>
+            
+            <button
+              onClick={() => galleryInputRef.current?.click()}
+              disabled={isGalleryUploading || (profile.images?.length || 0) >= 10}
+              className="px-3 py-1.5 text-[10px] font-bold text-emerald-500 dark:text-blue-400 bg-emerald-500/10 dark:bg-blue-500/10 hover:bg-emerald-500/20 dark:hover:bg-blue-500/20 rounded-lg transition-colors cursor-pointer border border-emerald-500/20 dark:border-blue-500/20 flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isGalleryUploading ? (
+                <Loader2 className="w-3 h-3 animate-spin" />
+              ) : (
+                <Camera className="w-3 h-3" />
+              )}
+              Upload Images
+            </button>
+            <input
+              ref={galleryInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              onChange={handleGalleryUpload}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {profile.images && profile.images.length > 0 ? (
+              profile.images.map((url, idx) => (
+                <div key={idx} className="relative aspect-video rounded-lg overflow-hidden border border-zinc-200/80 dark:border-zinc-800 group">
+                  <Image
+                    src={url}
+                    alt={`Gallery ${idx}`}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-200 flex items-center justify-center">
+                    <button
+                      onClick={() => handleDeleteGalleryImage(url)}
+                      disabled={isDeletingGalleryImage === url}
+                      className="opacity-0 group-hover:opacity-100 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all transform hover:scale-105 disabled:opacity-50"
+                    >
+                      {isDeletingGalleryImage === url ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-xs font-medium text-zinc-500 col-span-full">
+                No images uploaded yet. Show off your teaching environment!
+              </p>
+            )}
           </div>
         </div>
       </div>
