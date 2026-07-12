@@ -1,9 +1,17 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { FiMapPin, FiMail, FiPhone } from "react-icons/fi";
 import { FaFacebook, FaXTwitter, FaInstagram, FaLinkedin, FaGlobe } from "react-icons/fa6";
 
 export default function Footer() {
+  const pathname = usePathname();
   const currentYear = new Date().getFullYear();
+
+  if (pathname === '/login' || pathname === '/register') {
+    return null;
+  }
 
   return (
     <footer className="w-full border-t border-zinc-300/80 dark:border-white/10 bg-gradient-to-b from-transparent via-slate-50/40 to-slate-100/60 dark:via-slate-950/20 dark:to-slate-950/40 mt-auto">

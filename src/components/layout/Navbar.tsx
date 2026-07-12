@@ -22,6 +22,10 @@ export default function Navbar() {
   // Safely capture the dynamic user role string from the login session state
   const userRole = session?.user?.role;
 
+  if (pathname === '/login' || pathname === '/register') {
+    return null;
+  }
+
   return (
     <nav className="w-full border-b border-border/60 bg-background/70 backdrop-blur-xl sticky top-0 z-50 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

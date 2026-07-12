@@ -57,26 +57,23 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="relative group w-full max-w-md">
-      {/* Premium Ambient Background Glow effect */}
-      <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-teal-500 via-blue-500 to-indigo-600 dark:from-blue-500 dark:via-cyan-500 dark:to-indigo-600 opacity-20 blur-xl group-hover:opacity-30 transition duration-1000" />
-
-      {/* Glassmorphism Card Wrapper */}
-      <div className="relative border border-border/80 bg-background/80 backdrop-blur-xl rounded-2xl p-8 shadow-2xl space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-2xl font-black tracking-tight text-foreground">
+    <div className="relative group w-full max-w-md mx-auto">
+      {/* Transparent Wrapper with Border */}
+      <div className="relative bg-transparent border border-white/20 rounded-3xl p-8 sm:p-10 space-y-8">
+        <div className="space-y-2 text-center">
+          <h1 className="text-3xl font-black tracking-tight text-white">
             Sign In
           </h1>
-          <p className="text-xs font-medium text-muted-foreground">
+          <p className="text-xs font-medium text-white/70">
             Enter your credentials to manage your learning workspace.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-1.5">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="space-y-1.5 text-center">
             <Label
               htmlFor="email"
-              className="text-[10px] font-extrabold tracking-widest text-muted-foreground uppercase"
+              className="text-[10px] font-extrabold tracking-widest text-white/80 uppercase"
             >
               Email Address
             </Label>
@@ -88,15 +85,15 @@ export default function LoginForm() {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="h-11 rounded-xl bg-background/50 focus-visible:ring-blue-500/20 focus-visible:border-blue-500 transition-all duration-300"
+              className="h-11 rounded-xl bg-black/20 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500 transition-all duration-300"
               placeholder="Enter your email"
             />
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-1.5 text-center">
             <Label
               htmlFor="password"
-              className="text-[10px] font-extrabold tracking-widest text-muted-foreground uppercase"
+              className="text-[10px] font-extrabold tracking-widest text-white/80 uppercase"
             >
               Password
             </Label>
@@ -108,15 +105,15 @@ export default function LoginForm() {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              className="h-11 rounded-xl bg-background/50 focus-visible:ring-blue-500/20 focus-visible:border-blue-500 transition-all duration-300"
+              className="h-11 rounded-xl bg-black/20 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500 transition-all duration-300"
               placeholder="Enter your password"
             />
             {showForgotPassword && (
-              <div className="flex justify-end pt-0.5 animate-in fade-in slide-in-from-top-1 duration-200">
+              <div className="flex justify-center pt-1 animate-in fade-in slide-in-from-top-1 duration-200">
                 <button
                   type="button"
                   onClick={() => router.push("/forgot-password")}
-                  className="cursor-pointer text-xs font-semibold text-emerald-500 hover:text-emerald-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+                  className="cursor-pointer text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition-colors"
                 >
                   Forgot Password?
                 </button>
@@ -124,13 +121,34 @@ export default function LoginForm() {
             )}
           </div>
 
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setFormData({ email: "student@gmail.com", password: "12345678" })}
+              className="flex-1 rounded-xl border-white/20 text-xs font-bold text-white bg-white/5 hover:bg-white/10 hover:text-white transition-colors"
+            >
+              Demo as Student
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setFormData({ email: "tutor@gmail.com", password: "12345678" })}
+              className="flex-1 rounded-xl border-white/20 text-xs font-bold text-white bg-white/5 hover:bg-white/10 hover:text-white transition-colors"
+            >
+              Demo as Tutor
+            </Button>
+          </div>
+
           <Button
             type="submit"
             disabled={loading}
-            className="w-full h-11 rounded-xl bg-gradient-to-r from-teal-600 via-blue-600 to-indigo-600 dark:from-blue-600 dark:via-cyan-600 dark:to-indigo-600 hover:from-teal-500 hover:to-indigo-500 dark:hover:from-blue-500 dark:hover:to-indigo-500 text-white font-bold tracking-wide shadow-lg shadow-blue-600/10 transition-all duration-300 mt-4 cursor-pointer"
+            className="w-full h-11 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-bold tracking-wide shadow-lg shadow-emerald-500/20 transition-all duration-300 mt-2 cursor-pointer border-none"
           >
             {loading ? "Authenticating..." : "Authorize Login"}
           </Button>
+
+
         </form>
       </div>
     </div>
