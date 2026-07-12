@@ -24,6 +24,10 @@ export default async function DashboardLayout(props: DashboardLayoutProps) {
 
   const userRole = session.data.user?.role;
 
+  if (userRole === ROLES.ADMIN) {
+    redirect("/admin")
+  }
+
   // Mount the correct role layout slot conditionally
   if (userRole === ROLES.TUTOR) {
     return <>{props.tutor}</>;

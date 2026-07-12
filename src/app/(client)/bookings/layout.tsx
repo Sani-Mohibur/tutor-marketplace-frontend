@@ -24,6 +24,10 @@ export default async function BookingsLayout(props: BookingsLayoutProps) {
 
   const userRole = session.data?.user?.role;
 
+  if (userRole === ROLES.ADMIN) {
+    redirect("/")
+  }
+
   // Dynamically route based on the authentic session role
   if (userRole === ROLES.TUTOR) {
     return <>{props.tutor}</>;
