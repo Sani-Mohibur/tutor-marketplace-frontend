@@ -28,6 +28,8 @@ import {
   Award,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { Pagination } from "@/components/shared/Pagination";
 
 interface CategoryData {
   id: string;
@@ -57,7 +59,14 @@ const ICON_OPTIONS = [
 ];
 
 export default function AdminCategoriesPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const currentPage = Number(searchParams.get("page")) || 1;
+
   const [categories, setCategories] = useState<CategoryData[]>([]);
+  const [meta, setMeta] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeletingId, setIsDeletingId] = useState<string | null>(null);
@@ -79,13 +88,18 @@ export default function AdminCategoriesPage() {
   const fetchCategories = async () => {
     try {
       setIsLoading(true);
-      // Fetching all categories from admin endpoint
-      const res = await fetch(`${apiBase}/admin/categories`, {
+      const queryParams = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: "10"
+      });
+
+      const res = await fetch(`${apiBase}/admin/categories?${queryParams}`, {
         credentials: "include",
       });
       const json = await res.json();
       if (json.success) {
         setCategories(json.data || []);
+        setMeta(json.meta || null);
       }
     } catch (err) {
       console.error("Failed fetching categories list:", err);
@@ -97,7 +111,7 @@ export default function AdminCategoriesPage() {
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [currentPage]);
 
   const resetForm = () => {
     setEditingId(null);
@@ -511,6 +525,19 @@ export default function AdminCategoriesPage() {
           </table>
         </div>
       </div>
+
+      {/* Integrated Shared Pagination Footer Layout */}
+      {meta && meta.totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={meta.totalPages}
+          onPageChange={(page) => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("page", page.toString());
+            router.push(`${pathname}?${params.toString()}`);
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Loader2, Clock, CalendarDays, DollarSign, Ban } from "lucide-react";
 import { Pagination } from "@/components/shared/Pagination";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 interface AvailabilityData {
   id: string;
@@ -34,7 +35,12 @@ export default function AdminAvailabilitiesPage() {
   const [availabilities, setAvailabilities] = useState<AvailabilityData[]>([]);
   const [meta, setMeta] = useState<MetaData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const currentPage = Number(searchParams.get("page")) || 1;
 
   const apiBase = process.env.NEXT_PUBLIC_API_URL!;
 
@@ -191,7 +197,11 @@ export default function AdminAvailabilitiesPage() {
         <Pagination
           currentPage={currentPage}
           totalPages={meta.totalPages}
-          onPageChange={(page) => setCurrentPage(page)}
+          onPageChange={(page) => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("page", page.toString());
+            router.push(`${pathname}?${params.toString()}`);
+          }}
         />
       )}
     </div>

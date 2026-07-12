@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Loader2, Star } from "lucide-react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { toast } from "sonner";
 import { FeaturedTutorFilterBar } from "@/components/admin/featured/FeaturedTutorFilterBar";
 import { FeaturedTutorRow } from "@/components/admin/featured/FeaturedTutorRow";
@@ -44,7 +45,12 @@ export default function AdminFeaturedTutorsPage() {
     "all",
   );
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const currentPage = Number(searchParams.get("page")) || 1;
 
   const apiBase = process.env.NEXT_PUBLIC_API_URL!;
 
@@ -78,8 +84,18 @@ export default function AdminFeaturedTutorsPage() {
     }
   };
 
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
-    setCurrentPage(1);
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (currentPage !== 1) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("page", "1");
+      router.push(`${pathname}?${params.toString()}`);
+    }
   }, [activeTab, searchQuery]);
 
   useEffect(() => {
@@ -195,7 +211,11 @@ export default function AdminFeaturedTutorsPage() {
         <Pagination
           currentPage={currentPage}
           totalPages={meta.totalPages}
-          onPageChange={(page) => setCurrentPage(page)}
+          onPageChange={(page) => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("page", page.toString());
+            router.push(`${pathname}?${params.toString()}`);
+          }}
         />
       )}
     </div>

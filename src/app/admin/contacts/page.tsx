@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { Loader2, Mail, Ban, Calendar } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { Pagination } from "@/components/shared/Pagination";
 
 interface ContactMessage {
   id: string;
@@ -14,7 +16,14 @@ interface ContactMessage {
 }
 
 export default function AdminContactsPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const currentPage = Number(searchParams.get("page")) || 1;
+
   const [messages, setMessages] = useState<ContactMessage[]>([]);
+  const [meta, setMeta] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const apiBase = process.env.NEXT_PUBLIC_API_URL!;
@@ -22,12 +31,18 @@ export default function AdminContactsPage() {
   const fetchContacts = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch(`${apiBase}/contact`, {
+      const queryParams = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: "10"
+      });
+
+      const res = await fetch(`${apiBase}/contact?${queryParams}`, {
         credentials: "include",
       });
       const json = await res.json();
       if (json.success) {
         setMessages(json.data || []);
+        setMeta(json.meta || null);
       } else {
         toast.error(json.message || "Failed to load contact messages.");
       }
@@ -41,7 +56,7 @@ export default function AdminContactsPage() {
 
   useEffect(() => {
     fetchContacts();
-  }, []);
+  }, [currentPage]);
 
   return (
     <div className="space-y-8 w-full animate-fade-in">
@@ -134,6 +149,19 @@ export default function AdminContactsPage() {
           </table>
         </div>
       </div>
+
+      {/* Integrated Shared Pagination Footer Layout */}
+      {meta && meta.totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={meta.totalPages}
+          onPageChange={(page) => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("page", page.toString());
+            router.push(`${pathname}?${params.toString()}`);
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { Loader2, Ban, Star, MessageSquare, UserPlus, CheckCircle2, X } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { Pagination } from "@/components/shared/Pagination";
 
 interface ReviewData {
   id: string;
@@ -17,7 +19,14 @@ interface ReviewData {
 }
 
 export default function AdminReviewsPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const currentPage = Number(searchParams.get("page")) || 1;
+
   const [reviews, setReviews] = useState<ReviewData[]>([]);
+  const [meta, setMeta] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [tutors, setTutors] = useState<any[]>([]);
@@ -34,12 +43,18 @@ export default function AdminReviewsPage() {
   const fetchReviews = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch(`${apiBase}/reviews/admin/all`, {
+      const queryParams = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: "10"
+      });
+
+      const res = await fetch(`${apiBase}/reviews/admin/all?${queryParams}`, {
         credentials: "include",
       });
       const json = await res.json();
       if (json.success) {
         setReviews(json.data || []);
+        setMeta(json.meta || null);
       }
     } catch (err) {
       console.error("Failed fetching reviews:", err);
@@ -65,6 +80,9 @@ export default function AdminReviewsPage() {
 
   useEffect(() => {
     fetchReviews();
+  }, [currentPage]);
+
+  useEffect(() => {
     fetchTutors();
   }, []);
 
@@ -326,6 +344,19 @@ export default function AdminReviewsPage() {
           </table>
         </div>
       </div>
+
+      {/* Integrated Shared Pagination Footer Layout */}
+      {meta && meta.totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={meta.totalPages}
+          onPageChange={(page) => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("page", page.toString());
+            router.push(`${pathname}?${params.toString()}`);
+          }}
+        />
+      )}
     </div>
   );
 }

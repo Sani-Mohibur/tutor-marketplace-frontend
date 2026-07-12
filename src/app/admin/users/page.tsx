@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Loader2, Users } from "lucide-react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { UserFilterBar } from "@/components/admin/users/UserFilterBar";
 import { UserRow } from "@/components/admin/users/UserRow";
 import { Pagination } from "@/components/shared/Pagination";
@@ -29,6 +30,12 @@ export default function AdminUserDirectoryPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState<string | null>(null);
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const currentPage = Number(searchParams.get("page")) || 1;
+
   // Filter & Pagination States
   const [activeTab, setActiveTab] = useState<
     "all" | "tutor" | "student" | "admin"
@@ -37,7 +44,6 @@ export default function AdminUserDirectoryPage() {
     "all",
   );
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
 
   const apiBase = process.env.NEXT_PUBLIC_API_URL!;
 
@@ -70,9 +76,19 @@ export default function AdminUserDirectoryPage() {
     }
   };
 
+  const isFirstRender = useRef(true);
+
   // Reset to page 1 whenever filters change to avoid empty data state splits
   useEffect(() => {
-    setCurrentPage(1);
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (currentPage !== 1) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("page", "1");
+      router.push(`${pathname}?${params.toString()}`);
+    }
   }, [activeTab, statusFilter, searchQuery]);
 
   // Synchronize on page or filter mutation boundaries
@@ -190,7 +206,11 @@ export default function AdminUserDirectoryPage() {
         <Pagination
           currentPage={currentPage}
           totalPages={meta.totalPages}
-          onPageChange={(page) => setCurrentPage(page)}
+          onPageChange={(page) => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("page", page.toString());
+            router.push(`${pathname}?${params.toString()}`);
+          }}
         />
       )}
     </div>
