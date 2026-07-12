@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Mail, Clock, ShieldAlert, Zap, Copy, Check } from "lucide-react";
+import ContactForm from "@/components/contact/ContactForm";
 
 export default function SupportContactPage() {
   const [copiedText, setCopiedText] = useState(false);
@@ -39,6 +40,14 @@ export default function SupportContactPage() {
           </p>
         </section>
       </div>
+
+
+      {/* Form Section */}
+      <section className="mt-16 w-full max-w-4xl mx-auto z-10 px-4 mb-20 relative">
+        <ContactForm />
+      </section>
+
+
 
       {/* 2. CONTACT DETAILS GRID LOGIC SECTION */}
       <section className="bg-muted/30 border border-border/40 rounded-2xl p-8 md:p-12 space-y-12">
@@ -125,6 +134,8 @@ export default function SupportContactPage() {
           </div>
         </div>
       </section>
+
+
     </main>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
+import { useState } from "react";
 import {
   Search,
   Calendar,
@@ -12,8 +11,6 @@ import {
   ShieldCheck,
   Zap,
   Clock,
-  ArrowRight,
-  Plus,
 } from "lucide-react";
 
 export default function HowItWorksPage() {
@@ -47,11 +44,10 @@ export default function HowItWorksPage() {
         <div className="bg-muted/60 border border-border/60 p-1.5 rounded-xl inline-flex items-center gap-1 w-full max-w-md shadow-xs">
           <button
             onClick={() => setActiveTab("students")}
-            className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${
-              activeTab === "students"
-                ? "bg-background text-emerald-600 dark:text-blue-400 shadow-sm border border-emerald-500/20 dark:border-blue-500/20"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
+            className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${activeTab === "students"
+              ? "bg-background text-emerald-600 dark:text-blue-400 shadow-sm border border-emerald-500/20 dark:border-blue-500/20"
+              : "text-muted-foreground hover:text-foreground"
+              }`}
           >
             <GraduationCap
               className={`w-4 h-4 ${activeTab === "students" ? "text-emerald-500 dark:text-blue-500" : ""}`}
@@ -60,11 +56,10 @@ export default function HowItWorksPage() {
           </button>
           <button
             onClick={() => setActiveTab("tutors")}
-            className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${
-              activeTab === "tutors"
-                ? "bg-background text-teal-600 dark:text-blue-400 shadow-sm border border-teal-500/20 dark:border-blue-500/20"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
+            className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${activeTab === "tutors"
+              ? "bg-background text-teal-600 dark:text-blue-400 shadow-sm border border-teal-500/20 dark:border-blue-500/20"
+              : "text-muted-foreground hover:text-foreground"
+              }`}
           >
             <Award
               className={`w-4 h-4 ${activeTab === "tutors" ? "text-teal-500 dark:text-blue-500" : ""}`}
@@ -255,7 +250,7 @@ export default function HowItWorksPage() {
       <section className="space-y-8 pt-4 max-w-4xl mx-auto">
         <div className="text-center space-y-2">
           <h2 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">
-            Frequently Asked Questions
+            Understanding Our Process
           </h2>
           <p className="text-muted-foreground text-xs md:text-sm">
             Everything you need to know about the Skill Bridge pipeline, booking

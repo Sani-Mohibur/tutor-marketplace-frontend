@@ -17,6 +17,7 @@ import {
   CalendarCheck,
   Clock,
   MessageSquare,
+  Mail,
 } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 import { authClient } from "@/lib/auth-client";
@@ -53,7 +54,7 @@ export function AdminLayoutClient({ children }: AdminLayoutProps) {
     }
   };
 
-  const navItems = [
+    const navItems = [
     { name: "Overview", href: "/admin", icon: LayoutDashboard },
     { name: "User Directory", href: "/admin/users", icon: Users },
     { name: "Vetting Queue", href: "/admin/verifications", icon: ShieldCheck },
@@ -63,6 +64,7 @@ export function AdminLayoutClient({ children }: AdminLayoutProps) {
     { name: "Booking Logs", href: "/admin/bookings", icon: CalendarCheck },
     { name: "Availabilities", href: "/admin/availabilities", icon: Clock },
     { name: "Reviews", href: "/admin/reviews", icon: MessageSquare },
+    { name: "Contact Messages", href: "/admin/contacts", icon: Mail },
   ];
 
   return (
