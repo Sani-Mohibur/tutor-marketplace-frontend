@@ -64,9 +64,9 @@ export function AdminLayoutClient({ children }: AdminLayoutProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex transition-colors duration-200">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex transition-colors duration-200 overflow-x-hidden">
       {/* 1. Desktop Sidebar Component Container */}
-      <aside className="hidden md:flex flex-col w-64 bg-background border-r border-black/5 dark:border-white/5 fixed inset-y-0 left-0 z-20">
+      <aside className="hidden lg:flex flex-col w-64 bg-background border-r border-black/5 dark:border-white/5 fixed inset-y-0 left-0 z-20">
         <div className="h-16 flex items-center px-6 border-b border-black/5 dark:border-white/5">
           <span className="text-base font-black tracking-tight text-foreground">
             Skill
@@ -130,7 +130,7 @@ export function AdminLayoutClient({ children }: AdminLayoutProps) {
       </aside>
 
       {/* 2. Mobile Nav Header Top-Bar */}
-      <div className="md:hidden flex items-center justify-between w-full h-16 px-4 bg-background border-b border-black/5 dark:border-white/5 fixed top-0 inset-x-0 z-30">
+      <div className="lg:hidden flex items-center justify-between w-full h-16 px-4 bg-background border-b border-black/5 dark:border-white/5 fixed top-0 inset-x-0 z-30">
         <span className="text-sm font-black text-foreground">
           SkillBridge <span className="text-red-500">Admin</span>
         </span>
@@ -164,7 +164,7 @@ export function AdminLayoutClient({ children }: AdminLayoutProps) {
 
       {/* 3. Mobile Navigation Draw Overlay Menu */}
       {isMobileOpen && (
-        <div className="md:hidden fixed inset-0 z-10 bg-background/95 backdrop-blur-md pt-20 px-4 space-y-2 flex flex-col justify-between pb-6">
+        <div className="lg:hidden fixed inset-0 z-10 bg-background/95 backdrop-blur-md pt-20 px-4 space-y-2 flex flex-col justify-between pb-6">
           <div className="space-y-2">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -200,9 +200,8 @@ export function AdminLayoutClient({ children }: AdminLayoutProps) {
         </div>
       )}
 
-      {/* 4. Scrollable Main Layout Display Viewport */}
-      <div className="flex-1 md:pl-64 pt-16 md:pt-0 flex flex-col min-w-0">
-        <main className="flex-grow p-6 md:p-10 max-w-7xl w-full mx-auto">
+      <div className="flex-1 lg:pl-64 pt-16 lg:pt-0 flex flex-col min-w-0">
+        <main className="flex-grow p-4 sm:p-6 lg:p-10 max-w-[1600px] w-full mx-auto">
           {children}
         </main>
       </div>

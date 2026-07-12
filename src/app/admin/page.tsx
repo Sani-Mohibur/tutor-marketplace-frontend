@@ -141,9 +141,9 @@ export default function AdminOverviewPage() {
               key={index}
               className="bg-card border border-black/5 dark:border-white/5 rounded-2xl p-5 shadow-xs relative overflow-hidden"
             >
-              <div className="flex justify-between items-start">
-                <div className="space-y-1.5">
-                  <span className="text-[10px] font-black text-muted-foreground uppercase tracking-wider block">
+              <div className="flex justify-between items-start gap-4">
+                <div className="space-y-1.5 min-w-0">
+                  <span className="text-[10px] font-black text-muted-foreground uppercase tracking-wider block truncate">
                     {card.title}
                   </span>
                   <span className="text-2xl font-black text-foreground block">
@@ -151,7 +151,7 @@ export default function AdminOverviewPage() {
                   </span>
                 </div>
                 <div
-                  className={`p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-black/5 dark:border-white/5 ${card.color}`}
+                  className={`p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-black/5 dark:border-white/5 shrink-0 ${card.color}`}
                 >
                   <Icon className="w-4 h-4" />
                 </div>
@@ -176,17 +176,17 @@ export default function AdminOverviewPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
             <Link
               href="/admin/verifications"
-              className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/50 dark:hover:bg-slate-900 border border-black/5 dark:border-white/5 text-xs font-bold transition-colors"
+              className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/50 dark:hover:bg-slate-900 border border-black/5 dark:border-white/5 text-xs font-bold transition-colors group"
             >
-              <span>Process Vetting Queue</span>
-              <ArrowUpRight className="w-4 h-4 text-muted-foreground" />
+              <span className="truncate">Process Vetting Queue</span>
+              <ArrowUpRight className="w-4 h-4 text-muted-foreground shrink-0 group-hover:text-foreground transition-colors" />
             </Link>
             <Link
               href="/admin/featured"
-              className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/50 dark:hover:bg-slate-900 border border-black/5 dark:border-white/5 text-xs font-bold transition-colors"
+              className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/50 dark:hover:bg-slate-900 border border-black/5 dark:border-white/5 text-xs font-bold transition-colors group"
             >
-              <span>Configure Showcase Placement</span>
-              <ArrowUpRight className="w-4 h-4 text-muted-foreground" />
+              <span className="truncate">Configure Showcase Placement</span>
+              <ArrowUpRight className="w-4 h-4 text-muted-foreground shrink-0 group-hover:text-foreground transition-colors" />
             </Link>
           </div>
         </div>
@@ -208,12 +208,12 @@ export default function AdminOverviewPage() {
             ].map((system, i) => (
               <div
                 key={i}
-                className="flex items-center justify-between p-3 rounded-xl bg-slate-50/50 dark:bg-slate-900/50 border border-black/5 dark:border-white/5"
+                className="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50/50 dark:bg-slate-900/50 border border-black/5 dark:border-white/5"
               >
-                <span className="text-xs font-bold text-muted-foreground">
+                <span className="text-xs font-bold text-muted-foreground truncate">
                   {system.node}
                 </span>
-                <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border text-emerald-500 bg-emerald-500/10 border-emerald-500/20 dark:text-blue-400 dark:bg-blue-500/5 dark:border-blue-500/10">
+                <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border text-emerald-500 bg-emerald-500/10 border-emerald-500/20 dark:text-blue-400 dark:bg-blue-500/5 dark:border-blue-500/10 shrink-0">
                   {system.status}
                 </span>
               </div>
