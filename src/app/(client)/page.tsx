@@ -8,6 +8,7 @@ import FeaturedReviews from "@/components/home/FeaturedReviews";
 import { Tutor } from "@/components/tutors/TutorCard";
 import { headers } from "next/headers";
 import { authClient } from "@/lib/auth-client";
+import FAQ from "@/components/home/faq";
 
 // Server-side fetching logic
 async function getFeaturedTutors(): Promise<Tutor[]> {
@@ -69,6 +70,7 @@ export default async function HomePage() {
         <FeaturedCategories />
         <FeaturedTutors initialFeaturedTutors={tutors} />
         <FeaturedReviews />
+        <FAQ />
         <InfiniteMarquee />
         {!isLoggedIn && <CallToAction />}
       </main>
