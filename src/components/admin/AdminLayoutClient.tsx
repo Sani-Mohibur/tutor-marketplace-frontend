@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 import { authClient } from "@/lib/auth-client";
+import { ROLES } from "@/constants/roles";
 import { toast } from "sonner";
 
 interface AdminLayoutProps {
@@ -34,6 +35,10 @@ export function AdminLayoutClient({ children }: AdminLayoutProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const { data: session } = authClient.useSession();
+  const role = session?.user?.role;
+  const roleLabel = role === ROLES.SUPPORT_ADMIN ? "Support Admin" : "Admin";
 
   const handleSignOut = async () => {
     try {
@@ -78,7 +83,7 @@ export function AdminLayoutClient({ children }: AdminLayoutProps) {
             Skill
             <span className="text-emerald-500 dark:text-blue-400">Bridge</span>
             <span className="ml-1.5 text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20">
-              Admin
+              {roleLabel}
             </span>
           </span>
         </div>
@@ -92,8 +97,8 @@ export function AdminLayoutClient({ children }: AdminLayoutProps) {
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-3 px-4 h-10 rounded-xl text-xs font-bold transition-all ${isActive
-                    ? "bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  ? "bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
                   }`}
               >
                 <Icon className="w-4 h-4 shrink-0" />
@@ -137,7 +142,7 @@ export function AdminLayoutClient({ children }: AdminLayoutProps) {
       {/* 2. Mobile Nav Header Top-Bar */}
       <div className="lg:hidden flex items-center justify-between w-full h-16 px-4 bg-background border-b border-black/5 dark:border-white/5 fixed top-0 inset-x-0 z-30">
         <span className="text-sm font-black text-foreground">
-          SkillBridge <span className="text-red-500">Admin</span>
+          SkillBridge <span className="text-red-500">{roleLabel}</span>
         </span>
 
         <div className="flex items-center gap-2">
@@ -180,8 +185,8 @@ export function AdminLayoutClient({ children }: AdminLayoutProps) {
                   href={item.href}
                   onClick={() => setIsMobileOpen(false)}
                   className={`flex items-center gap-3 px-4 h-12 rounded-xl text-xs font-bold ${isActive
-                      ? "bg-slate-900 text-white dark:bg-white dark:text-black"
-                      : "text-muted-foreground"
+                    ? "bg-slate-900 text-white dark:bg-white dark:text-black"
+                    : "text-muted-foreground"
                     }`}
                 >
                   <Icon className="w-4.5 h-4.5" />
