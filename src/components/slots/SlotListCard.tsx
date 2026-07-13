@@ -201,13 +201,12 @@ export function SlotListCard({
             ) : (
               <Banknote className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
             )}
-            <span className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded-full border ${
-              slotData.paymentMethod === "stripe"
+            <span className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded-full border ${slotData.paymentMethod === "stripe"
                 ? "bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20"
                 : slotData.paymentMethod === "both"
                   ? "bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20"
                   : "bg-zinc-500/10 text-zinc-600 dark:text-zinc-400 border-zinc-500/20"
-            }`}>
+              }`}>
               {slotData.paymentMethod === "both" ? "Cash / Stripe" : slotData.paymentMethod === "stripe" ? "Stripe Only" : "Cash Only"}
             </span>
           </div>
