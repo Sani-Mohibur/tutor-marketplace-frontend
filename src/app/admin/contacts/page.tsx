@@ -111,7 +111,7 @@ export default function AdminContactsPage() {
                     <td className="px-6 py-4 align-top">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
-                          <Mail className="w-4 h-4 text-emerald-500" />
+                          <Mail className="w-4 h-4 text-emerald-500 dark:text-blue-500" />
                         </div>
                         <div>
                           <p className="font-black text-foreground capitalize text-sm">

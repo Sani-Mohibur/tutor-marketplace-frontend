@@ -12,10 +12,12 @@ import {
   ShieldAlert,
   Loader2,
   ArrowUpRight,
+  DollarSign,
 } from "lucide-react";
 import Link from "next/link";
 import { VerificationPieChart } from "@/components/admin/verifications/VerificationPieChart";
 import { FeaturedPieChart } from "@/components/admin/featured/FeaturedPieChart";
+import { PaymentRevenueChart } from "@/components/admin/payments/PaymentRevenueChart";
 
 interface DashboardStats {
   totalUsers: number;
@@ -26,6 +28,7 @@ interface DashboardStats {
   totalAvailabilities: number;
   totalFeatured: number;
   totalVerified: number;
+  totalRevenue: number;
 }
 
 export default function AdminOverviewPage() {
@@ -119,6 +122,13 @@ export default function AdminOverviewPage() {
       icon: Star,
       color: "text-orange-500",
     },
+    {
+      title: "Total Revenue",
+      count: stats?.totalRevenue ?? 0,
+      icon: DollarSign,
+      color: "text-emerald-500",
+      isCurrency: true,
+    },
   ];
 
   return (
@@ -149,7 +159,9 @@ export default function AdminOverviewPage() {
                     {card.title}
                   </span>
                   <span className="text-2xl font-black text-foreground block">
-                    {card.count.toLocaleString()}
+                    {card.isCurrency
+                      ? `$${card.count.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                      : card.count.toLocaleString()}
                   </span>
                 </div>
                 <div
@@ -161,6 +173,11 @@ export default function AdminOverviewPage() {
             </div>
           );
         })}
+      </div>
+
+      {/* Financial Growth Matrix */}
+      <div className="w-full">
+        <PaymentRevenueChart />
       </div>
 
       {/* Analytics Row */}
@@ -211,8 +228,8 @@ export default function AdminOverviewPage() {
           </div>
           <div className="space-y-2.5">
             {[
-              { node: "Stripe Escrow Integration", status: "Operational" },
-              { node: "Socket Engine Cluster", status: "Operational" },
+              { node: "Stripe Escrow Integration", status: "Operational", href: "/admin/payments" },
+              { node: "Socket Engine Cluster", status: "Operational", href: "/admin/contacts" },
             ].map((system, i) => (
               <div
                 key={i}
@@ -221,9 +238,12 @@ export default function AdminOverviewPage() {
                 <span className="text-xs font-bold text-muted-foreground truncate">
                   {system.node}
                 </span>
-                <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border text-emerald-500 bg-emerald-500/10 border-emerald-500/20 dark:text-blue-400 dark:bg-blue-500/5 dark:border-blue-500/10 shrink-0">
+                <Link
+                  href={system.href}
+                  className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border text-emerald-500 bg-emerald-500/10 border-emerald-500/20 dark:text-blue-400 dark:bg-blue-500/5 dark:border-blue-500/10 shrink-0 hover:bg-emerald-500/20 dark:hover:bg-blue-500/10 transition-colors cursor-pointer"
+                >
                   {system.status}
-                </span>
+                </Link>
               </div>
             ))}
           </div>

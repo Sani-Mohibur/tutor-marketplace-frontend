@@ -18,6 +18,7 @@ import {
   Clock,
   MessageSquare,
   Mail,
+  DollarSign,
 } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 import { authClient } from "@/lib/auth-client";
@@ -64,6 +65,7 @@ export function AdminLayoutClient({ children }: AdminLayoutProps) {
     { name: "Booking Logs", href: "/admin/bookings", icon: CalendarCheck },
     { name: "Availabilities", href: "/admin/availabilities", icon: Clock },
     { name: "Reviews", href: "/admin/reviews", icon: MessageSquare },
+    { name: "Payments", href: "/admin/payments", icon: DollarSign },
     { name: "Contact Messages", href: "/admin/contacts", icon: Mail },
   ];
 
