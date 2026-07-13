@@ -23,7 +23,6 @@ A modern, full-featured tutor-student marketplace UI built with Next.js 16, Type
 ## 📚 Table of Contents
 
 - [Overview](#overview)
-- [What's New](#whats-new)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Pages & Features](#pages--features)
@@ -47,42 +46,19 @@ A modern, full-featured tutor-student marketplace UI built with Next.js 16, Type
 
 - **Public landing page** — hero section, featured tutors, categories, and a skills marquee
 - **Tutor discovery** — browse, search, and filter verified tutors by skill and category
-- **Authentication flows** — role-based sign-up (student / tutor), sign-in, and **forgot / reset password** via `better-auth`
+- **Authentication flows** — role-based sign-up (student / tutor), sign-in (with demo accounts), and **forgot / reset password** via `better-auth`
 - **Stripe Checkout** — students pay for sessions via Stripe with payment success / cancel pages and downloadable PDF receipts
 - **Cloudinary profile images** — users upload and display profile photos stored on Cloudinary
 - **Student dashboard** — view bookings, submit reviews, manage profile, and initiate payments
 - **Tutor dashboard** — manage availability slots (with payment method selection), view incoming bookings, and update profile
 - **Admin panel** — platform-wide stats, user management, tutor verification, and category control
+- **Support Admin role** — restricted access for support staff with view-only permissions on sensitive admin pages
 - **Dark / Light theme** — system-aware theme toggle with persistent preference
 - **Responsive design** — mobile-first layouts across all pages
 
 ---
 
-## What's New
 
-### 💳 Stripe Checkout Integration
-
-- **Payment method on slots** — tutors can set each availability slot to accept `cash`, `stripe`, or `both` payment methods
-- **Stripe Checkout redirect** — students are redirected to Stripe's hosted checkout page for secure card payments
-- **Payment Success page** (`/payment-success`) — animated confirmation screen with full receipt details (session info, tutor name, amount, transaction ID)
-- **Payment Cancel page** (`/payment-cancel`) — friendly cancel screen with option to retry from the bookings dashboard
-- **PDF receipt download** — students can download a beautifully styled PDF receipt generated server-side
-
-### 🖼️ Cloudinary Profile Images
-
-- **Profile photo upload** — students and tutors can upload profile images from the profile edit page
-- **Cloudinary-hosted images** — photos are served from `res.cloudinary.com` with Next.js Image optimization enabled
-- **Face-aware cropping** — uploaded images are auto-cropped to 400×400 with face detection
-
-### 🔑 Forgot / Reset Password
-
-- **Forgot Password page** (`/forgot-password`) — users enter their email to receive a password reset link
-- **Reset Password page** (`/reset-password`) — users enter a new password using the token from the email link
-- **Integrated with better-auth** — uses the built-in `forgetPassword` and `resetPassword` client methods
-
-> ⚠️ **Known Issue:** The forgot password flow works correctly on localhost but may experience issues when deployed on Render (backend) due to transactional email delivery constraints.
-
----
 
 ## Tech Stack
 
@@ -215,6 +191,7 @@ Server-side rendered landing page featuring:
 ### 👤 Profile (`/profile`)
 
 - View and edit user profile information
+- **One-time name change** — users are restricted to changing their name exactly once
 - **Profile image upload** — upload and preview profile photos stored on Cloudinary
 - Tutor-specific fields: bio, price per hour, experience years, categories
 
@@ -229,6 +206,7 @@ Role-based parallel routes using Next.js `@student` / `@tutor` slots:
 
 - Email/password authentication via `better-auth`
 - Role selection during registration (`student` or `tutor`)
+- **Demo login** — single-click demo login buttons for all roles, including the `Support Admin`
 - Session persisted via HTTP-only cookies
 
 ### 🔑 Forgot Password (`/forgot-password`)
@@ -243,12 +221,12 @@ Role-based parallel routes using Next.js `@student` / `@tutor` slots:
 
 ### 🛠️ Admin (`/admin`)
 
-Protected admin panel (requires `admin` role):
+Protected admin panel (requires `admin` or `support_admin` role):
 
 - Platform-wide statistics
 - User management (view, block, role management)
 - Tutor verification control
-- Category management (create, update, delete)
+- Category management (create, update, delete) — **Note:** The `support_admin` role has view-only access to categories and is restricted from adding placeholder reviews.
 
 ---
 
@@ -258,7 +236,7 @@ Authentication is handled by the [`better-auth`](https://www.npmjs.com/package/b
 
 - The client is configured in `src/lib/auth-client.ts`
 - Sessions are maintained via HTTP-only cookies (set by the backend)
-- Three roles are enforced: **`student`**, **`tutor`**, and **`admin`**
+- Four roles are enforced: **`student`**, **`tutor`**, **`admin`**, and **`support_admin`**
 - Role constants are defined in `src/constants/roles.ts`
 - The dashboard uses **Next.js parallel routes** (`@student` / `@tutor`) to render role-appropriate content without a redirect
 
