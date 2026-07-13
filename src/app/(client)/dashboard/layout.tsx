@@ -24,7 +24,7 @@ export default async function DashboardLayout(props: DashboardLayoutProps) {
 
   const userRole = session.data.user?.role;
 
-  if (userRole === ROLES.ADMIN) {
+  if (userRole === ROLES.ADMIN || userRole === ROLES.SUPPORT_ADMIN) {
     redirect("/admin")
   }
 

@@ -24,7 +24,7 @@ export default async function BookingsLayout(props: BookingsLayoutProps) {
 
   const userRole = session.data?.user?.role;
 
-  if (userRole === ROLES.ADMIN) {
+  if (userRole === ROLES.ADMIN || userRole === ROLES.SUPPORT_ADMIN) {
     redirect("/")
   }
 

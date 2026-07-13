@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { Loader2, Ban, Star, MessageSquare, UserPlus, CheckCircle2, X } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import { ROLES } from "@/constants/roles";
 import { Pagination } from "@/components/shared/Pagination";
 
 interface ReviewData {
@@ -22,6 +24,7 @@ export default function AdminReviewsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const { data: session } = authClient.useSession();
 
   const currentPage = Number(searchParams.get("page")) || 1;
 
@@ -156,8 +159,9 @@ export default function AdminReviewsPage() {
         </p>
       </div>
 
-      {isAddingPlaceholder ? (
-        <div className="bg-card border border-border/50 p-6 rounded-2xl shadow-sm w-full xl:w-2/3">
+      {session?.user?.role !== ROLES.SUPPORT_ADMIN && (
+        isAddingPlaceholder ? (
+          <div className="bg-card border border-border/50 p-6 rounded-2xl shadow-sm w-full xl:w-2/3">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-black text-foreground flex items-center gap-2">
               <UserPlus className="w-4 h-4 text-primary" /> Create Placeholder Review
@@ -258,7 +262,7 @@ export default function AdminReviewsPage() {
         >
           <UserPlus className="w-4 h-4" /> Add Placeholder Review
         </button>
-      )}
+      ))}
 
       {/* Main Table Layout */}
       <div className="bg-card border border-border/50 rounded-2xl shadow-sm overflow-hidden">

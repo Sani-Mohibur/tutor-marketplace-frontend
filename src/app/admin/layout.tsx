@@ -24,7 +24,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   const userRole = session.data?.user?.role;
 
   // Role verification: If not explicitly authorized as admin, redirect to homepage
-  if (userRole !== ROLES.ADMIN) {
+  if (userRole !== ROLES.ADMIN && userRole !== ROLES.SUPPORT_ADMIN) {
     redirect("/");
   }
 

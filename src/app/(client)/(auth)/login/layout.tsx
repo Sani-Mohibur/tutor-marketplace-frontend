@@ -19,7 +19,7 @@ export default async function LoginLayout({ children }: LoginLayoutProps) {
   if (session?.data) {
     const userRole = session.data.user?.role;
 
-    if (userRole === ROLES.ADMIN) {
+    if (userRole === ROLES.ADMIN || userRole === ROLES.SUPPORT_ADMIN) {
       redirect("/admin");
     } else {
       redirect("/");

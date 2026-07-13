@@ -18,7 +18,7 @@ export default function AuthCallbackPage() {
     const handleCallback = async () => {
       try {
         const { data: session, error } = await authClient.getSession();
-        
+
         if (error || !session) {
           toast.error("Failed to authenticate session.");
           router.push("/login");
@@ -64,7 +64,7 @@ export default function AuthCallbackPage() {
         body: JSON.stringify({ role }),
         credentials: "include",
       });
-      
+
       const json = await res.json();
       if (json.success) {
         if (typeof window !== "undefined") {
@@ -90,7 +90,7 @@ export default function AuthCallbackPage() {
         router.push("/slots");
       } else if (role === ROLES.STUDENT) {
         router.push("/tutors");
-      } else if (role === ROLES.ADMIN) {
+      } else if (role === ROLES.ADMIN || role === ROLES.SUPPORT_ADMIN) {
         router.push("/admin");
       } else {
         router.push("/profile");
@@ -114,7 +114,7 @@ export default function AuthCallbackPage() {
               We noticed you're creating a new account. Please select how you want to use the platform.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 gap-3">
             <button
               onClick={() => finalizeRole("student")}

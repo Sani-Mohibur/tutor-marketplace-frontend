@@ -128,12 +128,12 @@ export default function LoginForm() {
             )}
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3 pt-4">
             <Button
               type="button"
               variant="outline"
               onClick={() => setFormData({ email: "student@gmail.com", password: "12345678" })}
-              className="cursor-pointer flex-1 rounded-xl border-white/20 text-xs font-bold text-white bg-white/5 hover:bg-white/10 hover:text-white transition-colors"
+              className="cursor-pointer flex-1 min-w-[140px] rounded-xl border-white/20 text-xs font-bold text-white bg-white/5 hover:bg-white/10 hover:text-white transition-colors"
             >
               Demo as Student
             </Button>
@@ -141,9 +141,17 @@ export default function LoginForm() {
               type="button"
               variant="outline"
               onClick={() => setFormData({ email: "tutor@gmail.com", password: "12345678" })}
-              className="cursor-pointer flex-1 rounded-xl border-white/20 text-xs font-bold text-white bg-white/5 hover:bg-white/10 hover:text-white transition-colors"
+              className="cursor-pointer flex-1 min-w-[140px] rounded-xl border-white/20 text-xs font-bold text-white bg-white/5 hover:bg-white/10 hover:text-white transition-colors"
             >
               Demo as Tutor
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setFormData({ email: "supportadmin@skillbridge.com", password: "QuantumSync33" })}
+              className="cursor-pointer flex-1 min-w-[140px] rounded-xl border-white/20 text-xs font-bold text-white bg-white/5 hover:bg-white/10 hover:text-white transition-colors"
+            >
+              Demo as Support Admin
             </Button>
           </div>
 

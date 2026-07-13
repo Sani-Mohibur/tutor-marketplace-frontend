@@ -29,6 +29,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import { ROLES } from "@/constants/roles";
 import { Pagination } from "@/components/shared/Pagination";
 
 interface CategoryData {
@@ -62,6 +64,7 @@ export default function AdminCategoriesPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const { data: session } = authClient.useSession();
 
   const currentPage = Number(searchParams.get("page")) || 1;
 
@@ -137,6 +140,10 @@ export default function AdminCategoriesPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (session?.user?.role === ROLES.SUPPORT_ADMIN) {
+      toast.error("You don't have permission to perform this action.");
+      return;
+    }
     if (!name.trim()) {
       toast.error("Name is required");
       return;
@@ -186,6 +193,10 @@ export default function AdminCategoriesPage() {
   };
 
   const handleDeleteCategory = async (id: string) => {
+    if (session?.user?.role === ROLES.SUPPORT_ADMIN) {
+      toast.error("You don't have permission to perform this action.");
+      return;
+    }
     try {
       setIsDeletingId(id);
       const res = await fetch(`${apiBase}/admin/categories/${id}`, {
