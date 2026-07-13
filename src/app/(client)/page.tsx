@@ -9,6 +9,7 @@ import { Tutor } from "@/components/tutors/TutorCard";
 import { headers } from "next/headers";
 import { authClient } from "@/lib/auth-client";
 import FAQ from "@/components/home/faq";
+import InfoSection from "@/components/home/InfoSection";
 
 // Server-side fetching logic
 async function getFeaturedTutors(): Promise<Tutor[]> {
@@ -66,8 +67,10 @@ export default async function HomePage() {
     <div className="relative min-h-screen flex flex-col w-full overflow-x-hidden">
       <main className="flex-grow w-full">
         <Hero />
+        <InfoSection />
         <HowItWorks />
         <FeaturedCategories />
+
         <FeaturedTutors initialFeaturedTutors={tutors} />
         <FeaturedReviews />
         <FAQ />
