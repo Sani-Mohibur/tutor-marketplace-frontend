@@ -26,16 +26,13 @@ export default function AdminVerificationsPage() {
   const [meta, setMeta] = useState<MetaData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState<string | null>(null);
-
-  const [activeTab, setActiveTab] = useState<"all" | "verified" | "unverified">(
-    "all",
-  );
   const [searchQuery, setSearchQuery] = useState("");
 
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
+  const activeTab = (searchParams.get("tab") as "all" | "verified" | "unverified") || "all";
   const currentPage = Number(searchParams.get("page")) || 1;
 
   const apiBase = process.env.NEXT_PUBLIC_API_URL!;
@@ -144,7 +141,12 @@ export default function AdminVerificationsPage() {
           {(["all", "verified", "unverified"] as const).map((tab) => (
             <button
               key={tab}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => {
+                const params = new URLSearchParams(searchParams.toString());
+                params.set("tab", tab);
+                params.set("page", "1");
+                router.push(`${pathname}?${params.toString()}`);
+              }}
               className={`flex-1 sm:flex-none text-xs font-bold px-4 py-2 rounded-lg capitalize transition-all cursor-pointer ${
                 activeTab === tab
                   ? "bg-white dark:bg-slate-800 text-foreground shadow-xs"

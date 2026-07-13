@@ -40,16 +40,13 @@ export default function AdminFeaturedTutorsPage() {
   const [meta, setMeta] = useState<MetaData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState<string | null>(null);
-
-  const [activeTab, setActiveTab] = useState<"all" | "featured" | "standard">(
-    "all",
-  );
   const [searchQuery, setSearchQuery] = useState("");
 
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
+  const activeTab = (searchParams.get("tab") as "all" | "featured" | "standard") || "all";
   const currentPage = Number(searchParams.get("page")) || 1;
 
   const apiBase = process.env.NEXT_PUBLIC_API_URL!;
@@ -152,7 +149,12 @@ export default function AdminFeaturedTutorsPage() {
 
       <FeaturedTutorFilterBar
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={(tab) => {
+          const params = new URLSearchParams(searchParams.toString());
+          params.set("tab", tab);
+          params.set("page", "1");
+          router.push(`${pathname}?${params.toString()}`);
+        }}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />

@@ -38,12 +38,8 @@ export default function AdminUserDirectoryPage() {
   const currentPage = Number(searchParams.get("page")) || 1;
 
   // Filter & Pagination States
-  const [activeTab, setActiveTab] = useState<
-    "all" | "tutor" | "student" | "admin"
-  >("all");
-  const [statusFilter, setStatusFilter] = useState<"all" | "true" | "false">(
-    "all",
-  );
+  const activeTab = (searchParams.get("tab") as "all" | "tutor" | "student" | "admin") || "all";
+  const statusFilter = (searchParams.get("status") as "all" | "true" | "false") || "all";
   const [searchQuery, setSearchQuery] = useState("");
 
   const apiBase = process.env.NEXT_PUBLIC_API_URL!;
@@ -139,12 +135,21 @@ export default function AdminUserDirectoryPage() {
 
       <UserGrowthChart />
 
-      {/* Filter Component Toolbar Context */}
       <UserFilterBar
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={(tab) => {
+          const params = new URLSearchParams(searchParams.toString());
+          params.set("tab", tab);
+          params.set("page", "1");
+          router.push(`${pathname}?${params.toString()}`);
+        }}
         statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
+        setStatusFilter={(status) => {
+          const params = new URLSearchParams(searchParams.toString());
+          params.set("status", status);
+          params.set("page", "1");
+          router.push(`${pathname}?${params.toString()}`);
+        }}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
