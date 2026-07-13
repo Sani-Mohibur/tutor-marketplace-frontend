@@ -19,11 +19,20 @@ export default function RegisterForm() {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match.", {
+        description: "Please ensure both password fields are identical.",
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -153,6 +162,26 @@ export default function RegisterForm() {
               }
               className="h-11 rounded-xl bg-black/20 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500 transition-all duration-300"
               placeholder="Enter your password"
+            />
+          </div>
+
+          <div className="space-y-1.5 text-center">
+            <Label
+              htmlFor="confirmPassword"
+              className="text-[10px] font-extrabold tracking-widest text-white/80 uppercase"
+            >
+              Confirm Password
+            </Label>
+            <Input
+              id="confirmPassword"
+              type="password"
+              required
+              value={formData.confirmPassword}
+              onChange={(e) =>
+                setFormData({ ...formData, confirmPassword: e.target.value })
+              }
+              className="h-11 rounded-xl bg-black/20 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500 transition-all duration-300"
+              placeholder="Confirm your password"
             />
           </div>
 

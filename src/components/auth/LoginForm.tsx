@@ -126,7 +126,7 @@ export default function LoginForm() {
               type="button"
               variant="outline"
               onClick={() => setFormData({ email: "student@gmail.com", password: "12345678" })}
-              className="flex-1 rounded-xl border-white/20 text-xs font-bold text-white bg-white/5 hover:bg-white/10 hover:text-white transition-colors"
+              className="cursor-pointer flex-1 rounded-xl border-white/20 text-xs font-bold text-white bg-white/5 hover:bg-white/10 hover:text-white transition-colors"
             >
               Demo as Student
             </Button>
@@ -134,7 +134,7 @@ export default function LoginForm() {
               type="button"
               variant="outline"
               onClick={() => setFormData({ email: "tutor@gmail.com", password: "12345678" })}
-              className="flex-1 rounded-xl border-white/20 text-xs font-bold text-white bg-white/5 hover:bg-white/10 hover:text-white transition-colors"
+              className="cursor-pointer flex-1 rounded-xl border-white/20 text-xs font-bold text-white bg-white/5 hover:bg-white/10 hover:text-white transition-colors"
             >
               Demo as Tutor
             </Button>

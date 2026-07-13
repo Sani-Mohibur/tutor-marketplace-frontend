@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
+import Link from "next/link";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
@@ -139,12 +140,20 @@ export function ProfileDisplayView({
           </div>
         </div>
 
-        <button
-          onClick={onEditToggle}
-          className="px-4 py-2 text-xs font-bold text-emerald-500 dark:text-blue-400 bg-emerald-500/5 dark:bg-blue-500/5 hover:bg-emerald-500/10 dark:hover:bg-blue-500/10 rounded-lg transition-colors cursor-pointer border border-emerald-500/30 dark:border-blue-500/40 shadow-sm flex items-center gap-1.5"
-        >
-          <Edit3 className="w-3.5 h-3.5" /> Edit Profile Attributes
-        </button>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/profile/security"
+            className="px-4 py-2 text-xs font-bold text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800/60 dark:hover:bg-zinc-800 rounded-lg transition-colors cursor-pointer border border-zinc-300 dark:border-zinc-700/80 shadow-sm flex items-center gap-1.5"
+          >
+            <ShieldCheck className="w-3.5 h-3.5" /> Change Password
+          </Link>
+          <button
+            onClick={onEditToggle}
+            className="px-4 py-2 text-xs font-bold text-emerald-500 dark:text-blue-400 bg-emerald-500/5 dark:bg-blue-500/5 hover:bg-emerald-500/10 dark:hover:bg-blue-500/10 rounded-lg transition-colors cursor-pointer border border-emerald-500/30 dark:border-blue-500/40 shadow-sm flex items-center gap-1.5"
+          >
+            <Edit3 className="w-3.5 h-3.5" /> Edit Profile
+          </button>
+        </div>
       </div>
 
       {/* Premium Fully Fixed Contrast Grid Container */}
