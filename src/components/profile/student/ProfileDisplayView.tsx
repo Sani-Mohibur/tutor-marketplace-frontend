@@ -36,6 +36,7 @@ export function ProfileDisplayView({
 }: ProfileDisplayViewProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -91,12 +92,13 @@ export function ProfileDisplayView({
         <div className="flex items-center gap-4">
           {/* Avatar with upload overlay */}
           <div className="relative group">
-            {profile.user.image ? (
+            {profile.user.image && !imgError ? (
               <Image
                 src={profile.user.image}
                 alt={profile.user.name}
                 width={64}
                 height={64}
+                onError={() => setImgError(true)}
                 className="w-16 h-16 rounded-xl object-cover border-2 border-emerald-500/20 dark:border-blue-500/30"
               />
             ) : (
