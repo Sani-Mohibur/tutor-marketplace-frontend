@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FiMapPin, FiMail, FiPhone } from "react-icons/fi";
 import { FaFacebook, FaXTwitter, FaInstagram, FaLinkedin, FaGlobe } from "react-icons/fa6";
+import { BrandLogo } from "./BrandLogo";
 
 export default function Footer() {
   const pathname = usePathname();
@@ -19,10 +20,23 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-10">
 
           {/* Brand Block */}
-          <div className="flex flex-col space-y-4">
-            <div className="text-3xl font-bold tracking-tight text-foreground">
-              Skill
-              <span className="text-emerald-500 dark:text-blue-400">Bridge</span>
+          <div className="flex flex-col space-y-0">
+            <div className="h-14 flex items-center">
+              <Link
+                href="/"
+                className="flex items-center gap-1 text-lg font-black tracking-tight text-foreground group transition-colors"
+              >
+                <div className="w-13 h-13 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                  <BrandLogo />
+                </div>
+
+                <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground to-muted-foreground group-hover:text-foreground transition-all duration-300">
+                  Skill
+                  <span className="text-emerald-500 dark:text-blue-400">
+                    Bridge
+                  </span>
+                </span>
+              </Link>
             </div>
             <p className="text-sm text-muted-foreground/80 leading-relaxed">
               An elite ecosystem that connects learners with expert tutors.
@@ -32,8 +46,10 @@ export default function Footer() {
           </div>
 
           {/* Contact & Location */}
-          <div className="flex flex-col space-y-4">
-            <h3 className="font-bold text-foreground tracking-tight text-lg">Contact Us</h3>
+          <div className="flex flex-col -space-y-2">
+            <div className="h-14 flex items-center">
+              <h3 className="font-bold text-foreground tracking-tight text-xl">Contact Us</h3>
+            </div>
             <ul className="space-y-2 text-sm text-muted-foreground/80">
               <li className="flex items-start gap-3">
                 <FiMapPin className="w-4 h-4 text-emerald-500 dark:text-blue-400 shrink-0 mt-0.5" />
@@ -51,9 +67,11 @@ export default function Footer() {
           </div>
 
           {/* Social Links */}
-          <div className="flex flex-col space-y-4">
-            <h3 className="font-bold text-foreground tracking-tight text-lg">Follow Us</h3>
-            <p className="text-sm text-muted-foreground/80">
+          <div className="flex flex-col -space-y-2">
+            <div className="h-14 flex items-center">
+              <h3 className="font-bold text-foreground tracking-tight text-xl">Follow Us</h3>
+            </div>
+            <p className="mb-2 text-sm text-muted-foreground/80">
               Stay updated with our latest news and announcements.
             </p>
             <div className="flex flex-wrap gap-x-4 gap-y-1.5 pt-2">

@@ -21,6 +21,18 @@ export function MobileNavLinks({
 
   return (
     <>
+      <Link
+        href="/"
+        onClick={() => setIsOpen(false)}
+        className={`block px-3 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all ${
+          isActive("/")
+            ? "text-emerald-500 dark:text-blue-400 bg-emerald-500/5 dark:bg-blue-500/5"
+            : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+        }`}
+      >
+        Home
+      </Link>
+
       {isTutor ? (
         <Link
           href="/slots"

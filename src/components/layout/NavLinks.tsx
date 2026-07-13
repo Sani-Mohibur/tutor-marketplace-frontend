@@ -16,6 +16,16 @@ export function NavLinks({ pathname, isLoggedIn, userRole }: NavLinksProps) {
 
   return (
     <div className="hidden md:flex items-center space-x-1">
+      <Link
+        href="/"
+        className={`text-xs font-semibold tracking-wide px-4 py-2 rounded-xl transition-all duration-300 ${isActive("/")
+          ? "text-emerald-500 dark:text-blue-400 bg-emerald-500/15 dark:bg-blue-500/15"
+          : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+          }`}
+      >
+        Home
+      </Link>
+
       {/* Role Conditional Link: Students find tutors, Tutors manage slots */}
       {isTutor ? (
         <Link

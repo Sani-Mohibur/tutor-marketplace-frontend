@@ -70,7 +70,6 @@ export default async function HomePage() {
         <InfoSection />
         <HowItWorks />
         <FeaturedCategories />
-
         <FeaturedTutors initialFeaturedTutors={tutors} />
         <FeaturedReviews />
         <FAQ />

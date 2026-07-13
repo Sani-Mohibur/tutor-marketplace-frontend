@@ -68,7 +68,7 @@ export default function FAQ() {
                 </div>
 
                 {/* CTA Section */}
-                <div className="relative mt-16 overflow-hidden rounded-2xl border border-border bg-emerald-50 dark:bg-slate-950 p-8 sm:p-12 text-center flex flex-col items-center justify-center space-y-4">
+                <div className="relative mt-16 overflow-hidden rounded-md border border-border bg-emerald-50 dark:bg-slate-950 p-8 sm:p-12 text-center flex flex-col items-center justify-center space-y-4">
                     {/* Diagonal Line Pattern */}
                     <div
                         className="absolute inset-0 opacity-[0.05] dark:opacity-[0.05]"

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
 import LoginForm from "@/components/auth/LoginForm";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 
 export default function LoginPage() {
   return (
@@ -27,6 +28,8 @@ export default function LoginPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_35%,rgba(2,6,23,0.25)_100%)]" />
       </div>
 
+
+
       {/* Content Layout */}
       <div className="relative z-10 grid min-h-screen w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
         {/* Left Column */}
@@ -34,6 +37,22 @@ export default function LoginPage() {
 
         {/* Middle Column - Branding */}
         <div className="flex flex-col items-center justify-center px-6 text-center text-white">
+          <Link
+            href="/"
+            className="flex items-center gap-2 mb-8 group transition-colors"
+          >
+            <div className="w-16 h-16 flex items-center justify-center group-hover:scale-105 transition-transform duration-300 drop-shadow-xl">
+              <BrandLogo />
+            </div>
+
+            <span className="text-5xl font-black text-white transition-all duration-300 drop-shadow-md">
+              Skill
+              <span className="text-emerald-500 dark:text-blue-400">
+                Bridge
+              </span>
+            </span>
+          </Link>
+
           <h1 className="text-5xl xl:text-6xl font-black leading-tight tracking-tight mb-6 drop-shadow-lg">
             Learn. <br />
             Teach. <br />
