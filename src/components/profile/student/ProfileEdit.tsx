@@ -4,8 +4,9 @@ import React from "react";
 import { ArrowLeft, Shield } from "lucide-react";
 
 interface ProfileEditProps {
-  formData: { bio: string; education: string; phone: string; address: string };
-  readOnlyData: { name: string; email: string };
+  formData: { name: string; bio: string; education: string; phone: string; address: string };
+  readOnlyData: { email: string };
+  isNameChanged: boolean;
   onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
@@ -15,6 +16,7 @@ interface ProfileEditProps {
 export function ProfileEdit({
   formData,
   readOnlyData,
+  isNameChanged,
   onChange,
   onCancel,
 }: ProfileEditProps) {
@@ -39,21 +41,8 @@ export function ProfileEdit({
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Locked Name Field */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
-              Full Name
-            </label>
-            <input
-              type="text"
-              disabled
-              value={readOnlyData.name}
-              className="w-full bg-zinc-100 dark:bg-zinc-800/40 border border-zinc-300 dark:border-zinc-700/80 rounded-lg px-3 py-2.5 text-xs text-zinc-500 dark:text-zinc-400 font-medium cursor-not-allowed select-none shadow-inner"
-            />
-          </div>
-
-          {/* Locked Email Field */}
-          <div className="space-y-1.5">
+          {/* Email Field - Always Locked */}
+          <div className="space-y-1.5 md:col-span-2">
             <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
               Email Address
             </label>
@@ -63,6 +52,44 @@ export function ProfileEdit({
               value={readOnlyData.email}
               className="w-full bg-zinc-100 dark:bg-zinc-800/40 border border-zinc-300 dark:border-zinc-700/80 rounded-lg px-3 py-2.5 text-xs text-zinc-500 dark:text-zinc-400 font-medium cursor-not-allowed select-none shadow-inner"
             />
+          </div>
+        </div>
+      </div>
+
+      <hr className="border-zinc-200 dark:border-zinc-800/80" />
+
+      {/* Mutable Attributes Inputs Matrix */}
+      <div className="space-y-4">
+        <h3 className="text-xs font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+          Editable Student Attributes
+        </h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Name Field - One Time Editable */}
+          <div className="space-y-1.5 md:col-span-2">
+            <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
+              Full Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              disabled={isNameChanged}
+              value={formData.name}
+              onChange={onChange}
+              className={`w-full border rounded-lg px-3 py-2.5 text-xs font-medium focus:outline-none transition-colors shadow-xs ${isNameChanged
+                  ? "bg-zinc-100 dark:bg-zinc-800/40 border-zinc-300 dark:border-zinc-700/80 text-zinc-500 dark:text-zinc-400 cursor-not-allowed shadow-inner"
+                  : "bg-zinc-50/50 dark:bg-zinc-900/30 border-zinc-200 dark:border-zinc-800/80 focus:border-emerald-500 dark:focus:border-blue-500/60 text-zinc-900 dark:text-zinc-100"
+                }`}
+            />
+            {isNameChanged ? (
+              <p className="text-[10px] text-red-500 dark:text-red-400 mt-1 font-medium">
+                You have already used your one-time name change.
+              </p>
+            ) : (
+              <p className="text-[10px] text-emerald-600 dark:text-blue-400 mt-1 font-medium">
+                You can change your name only once. After saving, you won't be able to change it again.
+              </p>
+            )}
           </div>
         </div>
       </div>

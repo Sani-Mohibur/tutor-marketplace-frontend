@@ -15,6 +15,7 @@ interface ProfileData {
     name: string;
     email: string;
     role: string;
+    isNameChanged: boolean;
   };
 }
 
@@ -24,6 +25,7 @@ export default function StudentProfileEditPage() {
   const router = useRouter();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [formData, setFormData] = useState({
+    name: "",
     bio: "",
     education: "",
     phone: "",
@@ -32,6 +34,7 @@ export default function StudentProfileEditPage() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   useEffect(() => {
     fetchProfileData();
@@ -47,6 +50,7 @@ export default function StudentProfileEditPage() {
       if (json.success && json.data) {
         setProfile(json.data);
         setFormData({
+          name: json.data.user?.name || "",
           bio: json.data.bio || "",
           education: json.data.education || "",
           phone: json.data.phone || "",
@@ -71,10 +75,18 @@ export default function StudentProfileEditPage() {
     router.push("/profile");
   };
 
-  const handleSubmitProfile = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmitProfile = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    
+    // If the name is changed, show the confirmation dialog first
+    if (formData.name !== profile?.user.name && !showConfirmDialog) {
+      setShowConfirmDialog(true);
+      return;
+    }
+
     try {
       setIsSaving(true);
+      setShowConfirmDialog(false);
       const res = await fetch(`${API_BASE}/profile/update`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -93,6 +105,7 @@ export default function StudentProfileEditPage() {
   };
 
   const isDirty =
+    formData.name !== (profile?.user?.name || "") ||
     formData.bio !== (profile?.bio || "") ||
     formData.education !== (profile?.education || "") ||
     formData.phone !== (profile?.phone || "") ||
@@ -123,8 +136,8 @@ export default function StudentProfileEditPage() {
         <form onSubmit={handleSubmitProfile} className="w-full space-y-6">
           <ProfileEdit
             formData={formData}
+            isNameChanged={profile?.user.isNameChanged || false}
             readOnlyData={{
-              name: profile?.user.name || "",
               email: profile?.user.email || "",
             }}
             onChange={handleInputChange}
@@ -155,6 +168,38 @@ export default function StudentProfileEditPage() {
           </div>
         </form>
       </div>
+
+      {showConfirmDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-background border border-border/50 p-6 rounded-2xl shadow-xl w-full max-w-md animate-in zoom-in-95 duration-200">
+            <h3 className="text-lg font-black text-foreground mb-2">
+              Confirm Name Change
+            </h3>
+            <p className="text-sm text-muted-foreground mb-6">
+              You are about to change your account name to <span className="font-bold text-foreground">{formData.name}</span>. 
+              You can change your name <span className="font-bold text-red-500">only once</span>. 
+              After saving, you won't be able to change it again. Are you sure you want to proceed?
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setShowConfirmDialog(false)}
+                className="px-4 py-2 text-sm font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-xl transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSubmitProfile()}
+                disabled={isSaving}
+                className="px-6 py-2 text-sm font-bold bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl transition-colors shadow-sm flex items-center justify-center min-w-[120px]"
+              >
+                {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Yes, change name"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
