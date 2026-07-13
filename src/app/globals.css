@@ -159,6 +159,13 @@
     transition: background-color 5000s ease-in-out 0s !important;
     -webkit-text-fill-color: var(--foreground) !important;
   }
+
+  .dark-autofill:-webkit-autofill,
+  .dark-autofill:-webkit-autofill:hover,
+  .dark-autofill:-webkit-autofill:focus,
+  .dark-autofill:-webkit-autofill:active {
+    -webkit-text-fill-color: white !important;
+  }
 }
 
 @theme inline {

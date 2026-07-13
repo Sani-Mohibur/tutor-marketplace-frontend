@@ -92,7 +92,7 @@ export default function LoginForm() {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="h-11 rounded-xl bg-black/20 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500 transition-all duration-300"
+              className="dark-autofill h-11 rounded-xl bg-black/20 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500 transition-all duration-300"
               placeholder="Enter your email"
             />
           </div>
@@ -112,7 +112,7 @@ export default function LoginForm() {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              className="h-11 rounded-xl bg-black/20 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500 transition-all duration-300"
+              className="dark-autofill h-11 rounded-xl bg-black/20 border-white/10 text-white placeholder:text-white/40 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500 transition-all duration-300"
               placeholder="Enter your password"
             />
             {showForgotPassword && (
@@ -166,7 +166,7 @@ export default function LoginForm() {
           <Button
             type="button"
             onClick={handleGoogleSignIn}
-            className="w-full h-11 rounded-xl bg-white text-zinc-900 hover:bg-zinc-100 font-bold tracking-wide shadow-lg shadow-white/5 transition-all duration-300 cursor-pointer border-none flex items-center justify-center gap-2"
+            className="w-full h-11 rounded-xl bg-gray-300 text-zinc-900 hover:bg-zinc-100 font-bold tracking-wide shadow-lg shadow-white/5 transition-all duration-300 cursor-pointer border-none flex items-center justify-center gap-2"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
